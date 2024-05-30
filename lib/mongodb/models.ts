@@ -151,6 +151,20 @@ const transaksiSchema2 = new Schema(
   }
 );
 
+export type TransactionType = {
+  _id: string;
+  date: string;
+  month: string;
+  year: string;
+  desc: string;
+  amount: number;
+  tipe: string;
+  kategoriId: string;
+  kategoriName: string;
+  kegiatanId: string;
+  userId: string;
+};
+
 const cobaSchema = new Schema({
   name: {
     type: String,

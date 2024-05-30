@@ -23,11 +23,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "bg-background font-sans antialiased min-h-screen",
           fontSans.variable
         )}
       >
-        {children}
+        <div className=" max-w-[80%] m-auto">{children}</div>
       </body>
     </html>
   );
