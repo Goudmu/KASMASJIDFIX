@@ -9,12 +9,9 @@ const DashboardPage = () => {
   const kegiatanId = useSearchParams().getAll("id")[0];
 
   async function getTransactions(searchParams: any) {
-    const res = await fetch(
-      `http://localhost:3000/api/transaksi/perKegiatan?id=${searchParams}`,
-      {
-        cache: "no-store",
-      }
-    );
+    const res = await fetch(`/api/transaksi/perKegiatan?id=${searchParams}`, {
+      cache: "no-store",
+    });
     const { transaksi } = await res.json();
     setTransaksi(transaksi);
   }
