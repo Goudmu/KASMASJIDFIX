@@ -1,6 +1,6 @@
 "use client";
 import TableDashboard from "@/components/own/dashboard/table";
-import { TransactionType } from "@/lib/mongodb/models";
+import { TransactionType, KategoriType } from "@/lib/mongodb/models";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -12,7 +12,15 @@ const DashboardPage = () => {
     const res = await fetch(`/api/transaksi/perKegiatan?id=${searchParams}`, {
       cache: "no-store",
     });
-    const { transaksi } = await res.json();
+    const { transaksi, allkategori } = await res.json();
+    transaksi.map((dataTransaksi: TransactionType) => {
+      allkategori.map((dataKategori: KategoriType) => {
+        if (dataTransaksi.kategoriId == dataKategori._id) {
+          dataTransaksi.kategoriName = dataKategori.nama;
+          return;
+        }
+      });
+    });
     setTransaksi(transaksi);
   }
 

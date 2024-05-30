@@ -1,4 +1,9 @@
-import { Transaksi2 } from "@/lib/mongodb/models";
+import {
+  Kategori2,
+  KategoriType,
+  TransactionType,
+  Transaksi2,
+} from "@/lib/mongodb/models";
 import { connectToDB } from "@/lib/mongodb/utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,7 +13,8 @@ export const GET = async (req: NextRequest) => {
   try {
     await connectToDB();
     const transaksi = await Transaksi2.find({ kegiatanId });
-    return NextResponse.json({ transaksi });
+    const allkategori = await Kategori2.find();
+    return NextResponse.json({ transaksi, allkategori });
   } catch (error: any) {
     console.log(error);
     throw new Error(error);

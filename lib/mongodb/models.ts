@@ -80,14 +80,6 @@ const kegiatanSchema2 = new Schema(
   }
 );
 
-export type CategoryType = {
-  _id: string;
-  nama: string;
-  tipe: string;
-  kegiatanId: number;
-  statusId: boolean;
-};
-
 const kategoriSchema2 = new Schema(
   {
     nama: {
@@ -114,6 +106,14 @@ const kategoriSchema2 = new Schema(
     timestamps: true,
   }
 );
+
+export type KategoriType = {
+  _id: string;
+  nama: string;
+  tipe: string;
+  kegiatanId: number;
+  statusId: boolean;
+};
 
 const transaksiSchema2 = new Schema(
   {

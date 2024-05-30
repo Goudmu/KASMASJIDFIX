@@ -21,6 +21,14 @@ import {
 } from "@/components/ui/table";
 import { TransactionType } from "@/lib/mongodb/models";
 import { useState } from "react";
+import {
+  capitalizeFirstLetter,
+  commafy,
+  getMonthsArray,
+  getYearsArray,
+  thisMonth,
+  thisYear,
+} from "@/lib/utils";
 
 export default function TableDashboard({
   transaksi,
@@ -29,9 +37,24 @@ export default function TableDashboard({
 }) {
   const [thisTransaksi, setThisTransaksi] = useState(transaksi);
   const [searchInput, setSearchInput] = useState("");
+  const [monthFilter, setMonthFilter] = useState(getMonthsArray());
+  const [yearFilter, setYearFilter] = useState(getYearsArray());
+  const [selectedMonth, setSelectedMonth] = useState(thisMonth());
+  const [selectedYear, setSelectedYear] = useState(thisYear());
 
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
+  };
+
+  const monthFilterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    const id = parseInt(target.id);
+    setSelectedMonth(monthFilter.filter((data) => data.id == id)[0]);
+  };
+  const yearFilterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    const id = parseInt(target.id);
+    setSelectedYear(yearFilter.filter((data) => data.id == id)[0]);
   };
 
   return (
@@ -56,30 +79,22 @@ export default function TableDashboard({
             <DropdownMenuContent className="w-[200px]">
               <DropdownMenuLabel>Select month</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup value="all">
-                <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="1">January</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="2">
-                  February
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="3">March</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="4">April</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="5">May</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="6">June</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="7">July</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="8">August</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="9">
-                  September
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="10">
-                  October
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="11">
-                  November
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="12">
-                  December
-                </DropdownMenuRadioItem>
+              <DropdownMenuRadioGroup value={selectedMonth.id.toString()}>
+                {monthFilter &&
+                  monthFilter.map((data) => {
+                    // CHANGE DATA.ID TO STRING FOR DropdownMenuRadioItem value
+                    const valueString = data.id.toString();
+                    return (
+                      <DropdownMenuRadioItem
+                        value={valueString}
+                        key={data.id}
+                        id={valueString}
+                        onClick={monthFilterHandler}
+                      >
+                        {data.name}
+                      </DropdownMenuRadioItem>
+                    );
+                  })}
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -94,12 +109,22 @@ export default function TableDashboard({
             <DropdownMenuContent className="w-[200px]">
               <DropdownMenuLabel>Select year</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup value="all">
-                <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="2023">2023</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="2022">2022</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="2021">2021</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="2020">2020</DropdownMenuRadioItem>
+              <DropdownMenuRadioGroup value={selectedYear.id.toString()}>
+                {yearFilter &&
+                  yearFilter.map((data) => {
+                    // CHANGE DATA.ID TO STRING FOR DropdownMenuRadioItem value
+                    const valueString = data.id.toString();
+                    return (
+                      <DropdownMenuRadioItem
+                        id={valueString}
+                        value={valueString}
+                        key={data.id}
+                        onClick={yearFilterHandler}
+                      >
+                        {data.name}
+                      </DropdownMenuRadioItem>
+                    );
+                  })}
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -118,15 +143,32 @@ export default function TableDashboard({
         <TableBody>
           {thisTransaksi &&
             thisTransaksi.map((data, index) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell>{data.date}</TableCell>
-                  <TableCell>{data.tipe}</TableCell>
-                  <TableCell>{data.desc}</TableCell>
-                  <TableCell>{data.kategoriName}</TableCell>
-                  <TableCell className="text-right">Rp{data.amount}</TableCell>
-                </TableRow>
-              );
+              // CHANGE DATE TO LOCAL DATE
+              const newDate = new Date(data.date);
+              const formattedDate = newDate.toLocaleDateString();
+
+              // SEARCH FITUR
+              if (data.desc.includes(searchInput) || searchInput == "") {
+                // MONTH AND YEAR FILTER
+                if (
+                  newDate.getMonth() == selectedMonth.id &&
+                  newDate.getFullYear() == selectedYear.id
+                ) {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>{formattedDate}</TableCell>
+                      <TableCell>{capitalizeFirstLetter(data.tipe)}</TableCell>
+                      <TableCell>{data.desc}</TableCell>
+                      <TableCell>
+                        {capitalizeFirstLetter(data.kategoriName)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        Rp{commafy(data.amount)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
+              }
             })}
         </TableBody>
       </Table>
