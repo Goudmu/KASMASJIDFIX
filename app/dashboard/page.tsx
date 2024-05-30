@@ -1,20 +1,30 @@
+"use client";
 import TableDashboard from "@/components/own/dashboard/table";
 import { TransactionType } from "@/lib/mongodb/models";
-import React from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-async function getTransactions(searchParams: any): Promise<TransactionType[]> {
-  const res = await fetch(
-    `http://localhost:3000/api/transaksi/perKegiatan?id=${searchParams.id}`,
-    {
-      cache: "no-store",
-    }
-  );
-  const { transaksi } = await res.json();
-  return transaksi;
-}
+const DashboardPage = () => {
+  const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
+  const kegiatanId = useSearchParams().getAll("id")[0];
 
-const DashboardPage = async ({ searchParams }: any) => {
-  const transaksi = await getTransactions(searchParams);
+  async function getTransactions(searchParams: any) {
+    const res = await fetch(
+      `http://localhost:3000/api/transaksi/perKegiatan?id=${searchParams}`,
+      {
+        cache: "no-store",
+      }
+    );
+    const { transaksi } = await res.json();
+    setTransaksi(transaksi);
+  }
+
+  useEffect(() => {
+    getTransactions(kegiatanId);
+  }, []);
+  if (transaksi.length == 0) {
+    return <div>Loading...</div>;
+  }
   return (
     <div>
       <h1>DASHBOARD PAGE</h1>

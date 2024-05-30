@@ -1,9 +1,5 @@
 "use client";
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/PG7dBPeIDIL
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,12 +20,20 @@ import {
   Table,
 } from "@/components/ui/table";
 import { TransactionType } from "@/lib/mongodb/models";
+import { useState } from "react";
 
 export default function TableDashboard({
   transaksi,
 }: {
   transaksi: TransactionType[];
 }) {
+  const [thisTransaksi, setThisTransaksi] = useState(transaksi);
+  const [searchInput, setSearchInput] = useState("");
+
+  const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
   return (
     <div className="border rounded-lg overflow-hidden">
       <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-4">
@@ -38,6 +42,8 @@ export default function TableDashboard({
             className="max-w-[200px] sm:max-w-[300px]"
             placeholder="Search description..."
             type="search"
+            id="input"
+            onChange={searchHandler}
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -110,8 +116,8 @@ export default function TableDashboard({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {transaksi &&
-            transaksi.map((data, index) => {
+          {thisTransaksi &&
+            thisTransaksi.map((data, index) => {
               return (
                 <TableRow key={index}>
                   <TableCell>{data.date}</TableCell>
