@@ -4,7 +4,6 @@ import { TransactionType, KategoriType } from "@/lib/mongodb/models";
 import React, { useEffect, useState } from "react";
 import { kegiatanIDStore, userIDStore } from "../store/zustand";
 import InputTransaksi from "@/components/own/dashboard/form/inputTransaksi";
-import useSWR from "swr";
 
 const DashboardPage = () => {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
@@ -61,7 +60,11 @@ const DashboardPage = () => {
         triggerGetNewTransaksi={triggerGetNewTransaksi}
         settriggerGetNewTransaksi={settriggerGetNewTransaksi}
       />
-      <TableDashboard transaksi={transaksi} />
+      <TableDashboard
+        transaksi={transaksi}
+        triggerGetNewTransaksi={triggerGetNewTransaksi}
+        settriggerGetNewTransaksi={settriggerGetNewTransaksi}
+      />
     </div>
   );
 };

@@ -10,6 +10,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuContent,
   DropdownMenu,
+  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import {
   TableHead,
@@ -20,7 +21,7 @@ import {
   Table,
 } from "@/components/ui/table";
 import { TransactionType } from "@/lib/mongodb/models";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   capitalizeFirstLetter,
   commafy,
@@ -29,13 +30,18 @@ import {
   thisMonth,
   thisYear,
 } from "@/lib/utils";
+import { MoreHorizontal } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function TableDashboard({
   transaksi,
+  triggerGetNewTransaksi,
+  settriggerGetNewTransaksi,
 }: {
   transaksi: TransactionType[];
+  triggerGetNewTransaksi: any;
+  settriggerGetNewTransaksi: any;
 }) {
-  // const [thisTransaksi, setThisTransaksi] = useState(transaksi);
   const [searchInput, setSearchInput] = useState("");
   const [monthFilter, setMonthFilter] = useState(getMonthsArray());
   const [yearFilter, setYearFilter] = useState(getYearsArray());
@@ -55,6 +61,26 @@ export default function TableDashboard({
     const target = e.target as HTMLDivElement;
     const id = parseInt(target.id);
     setSelectedYear(yearFilter.filter((data) => data.id == id)[0]);
+  };
+
+  const deleteTransaksiHandler = async (
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
+    try {
+      const res = await fetch("/api/transaksi", {
+        method: "DELETE",
+        body: JSON.stringify({
+          _id: e.currentTarget.id,
+        }),
+      });
+      if (res.ok) {
+        toast.success("Transaksi Berhasil Dihapus");
+        settriggerGetNewTransaksi(!triggerGetNewTransaksi);
+      }
+    } catch (error: any) {
+      console.log(error);
+      throw new Error(error);
+    }
   };
 
   return (
@@ -133,11 +159,12 @@ export default function TableDashboard({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className=" w-[10%]">Date</TableHead>
+            <TableHead className=" w-[10%]">Type</TableHead>
+            <TableHead className=" w-[50%]">Description</TableHead>
+            <TableHead className=" w-[10%]">Category</TableHead>
+            <TableHead className=" w-[10%]">Amount</TableHead>
+            <TableHead className=" w-[10%]">Edit / Delete</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -162,8 +189,25 @@ export default function TableDashboard({
                       <TableCell>
                         {capitalizeFirstLetter(data.kategoriName)}
                       </TableCell>
-                      <TableCell className="text-right">
-                        Rp{commafy(data.amount)}
+                      <TableCell>Rp{commafy(data.amount)}</TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <span className="sr-only">Open menu</span>
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              className=" cursor-pointer"
+                              onClick={deleteTransaksiHandler}
+                              id={data._id}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   );
