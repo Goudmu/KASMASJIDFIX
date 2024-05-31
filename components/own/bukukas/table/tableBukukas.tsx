@@ -13,8 +13,26 @@ import { BukuKasType } from "@/lib/mongodb/models";
 import React, { useState } from "react";
 import { capitalizeFirstLetter, commafy } from "@/lib/utils";
 import { kegiatanIDStore } from "@/app/store/zustand";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import InputBukuKas from "../form/inputBukuKas";
+import { toast } from "react-toastify";
 
-export default function TableBukukas({ bukuKas }: { bukuKas: BukuKasType[] }) {
+export default function TableBukukas({
+  bukuKas,
+  setTrigger,
+  trigger,
+}: {
+  bukuKas: BukuKasType[];
+  setTrigger: any;
+  trigger: any;
+}) {
   const [searchInput, setSearchInput] = useState("");
   const kegiatanId = kegiatanIDStore((state: any) => state.kegiatanID);
   const updateKegiatanId = kegiatanIDStore((state: any) => state.setKegiatanID);
@@ -24,6 +42,25 @@ export default function TableBukukas({ bukuKas }: { bukuKas: BukuKasType[] }) {
 
   const bukaBukuKasHanlder = (e: React.MouseEvent<HTMLDivElement>) => {
     updateKegiatanId(e.currentTarget.id);
+  };
+
+  const deleteBukukasHandler = async (e: React.MouseEvent<HTMLDivElement>) => {
+    try {
+      const res = await fetch("/api/bukukas", {
+        method: "DELETE",
+        body: JSON.stringify({
+          _id: e.currentTarget.id,
+        }),
+      });
+      if (res.ok) {
+        updateKegiatanId("660bb772285c3316e6c93e8d");
+        toast.success("Buku Kas Berhasil Dihapus");
+        setTrigger(!trigger);
+      }
+    } catch (error: any) {
+      console.log(error);
+      throw new Error(error);
+    }
   };
 
   return (
@@ -87,6 +124,34 @@ export default function TableBukukas({ bukuKas }: { bukuKas: BukuKasType[] }) {
                           Buka Buku Kas
                         </div>
                       )}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <div className=" w-full cursor-pointer">
+                            <InputBukuKas
+                              tipe={"edit"}
+                              kegiatanId={kegiatanId}
+                              dataBukuKas={data}
+                              setTrigger={setTrigger}
+                              trigger={trigger}
+                            />
+                          </div>
+                          <DropdownMenuItem
+                            className=" cursor-pointer"
+                            onClick={deleteBukukasHandler}
+                            id={data._id}
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 );
