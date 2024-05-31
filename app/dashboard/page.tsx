@@ -62,6 +62,9 @@ const DashboardPage = () => {
       />
       <TableDashboard
         transaksi={transaksi}
+        kegiatanId={kegiatanId}
+        category={category}
+        userId={userId}
         triggerGetNewTransaksi={triggerGetNewTransaksi}
         settriggerGetNewTransaksi={settriggerGetNewTransaksi}
       />

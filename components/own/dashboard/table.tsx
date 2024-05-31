@@ -32,15 +32,22 @@ import {
 } from "@/lib/utils";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "react-toastify";
+import InputTransaksi from "./form/inputTransaksi";
 
 export default function TableDashboard({
   transaksi,
   triggerGetNewTransaksi,
   settriggerGetNewTransaksi,
+  kegiatanId,
+  category,
+  userId,
 }: {
   transaksi: TransactionType[];
   triggerGetNewTransaksi: any;
   settriggerGetNewTransaksi: any;
+  kegiatanId: any;
+  category: any;
+  userId: any;
 }) {
   const [searchInput, setSearchInput] = useState("");
   const [monthFilter, setMonthFilter] = useState(getMonthsArray());
@@ -199,6 +206,19 @@ export default function TableDashboard({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
+                            <div className=" w-full cursor-pointer">
+                              <InputTransaksi
+                                tipe={"edit"}
+                                kegiatanId={kegiatanId}
+                                category={category}
+                                userId={userId}
+                                dataTransaksi={data}
+                                triggerGetNewTransaksi={triggerGetNewTransaksi}
+                                settriggerGetNewTransaksi={
+                                  settriggerGetNewTransaksi
+                                }
+                              />
+                            </div>
                             <DropdownMenuItem
                               className=" cursor-pointer"
                               onClick={deleteTransaksiHandler}

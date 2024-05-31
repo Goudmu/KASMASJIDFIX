@@ -34,6 +34,30 @@ export const POST = async (req: NextRequest) => {
   }
 };
 
+export const PUT = async (req: NextRequest) => {
+  try {
+    await connectToDB();
+    const { date, amount, tipe, desc, kategoriId, kegiatanId, userId, _id } =
+      await req.json();
+    const editTransaksi = await Transaksi2.findByIdAndUpdate(
+      { _id },
+      {
+        date,
+        amount,
+        tipe,
+        desc,
+        kategoriId,
+        kegiatanId,
+        userId,
+      }
+    );
+    return NextResponse.json({ message: "Transaksi Berhasil Ditambahkan" });
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
 export const DELETE = async (req: NextRequest) => {
   try {
     await connectToDB();

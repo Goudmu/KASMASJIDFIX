@@ -55,7 +55,9 @@ export default function ComponentTransaction({
           userId: userId,
         }
   );
-  const [selectedDate, setselectedDate] = React.useState<Date>();
+  const [selectedDate, setselectedDate] = React.useState<Date | undefined>(
+    dataTransaksi && dataTransaksi.date
+  );
 
   const changeHandler = (e: React.FormEvent<HTMLInputElement>) => {
     const formEvent = e as React.FormEvent<HTMLInputElement>;
@@ -67,12 +69,6 @@ export default function ComponentTransaction({
   };
 
   const submitHandler = async (e: any) => {
-    let newFormData = formData;
-
-    // CONVERT TYPE DATE TO NEW DATE
-    if (selectedDate != undefined)
-      newFormData.date = new Date(selectedDate.toISOString());
-
     // EDIT TRANSAKSI
     if (tipe == "edit") {
       const res = await fetch("/api/transaksi", {
@@ -161,7 +157,18 @@ export default function ComponentTransaction({
               <div>
                 <Select onValueChange={categoryHandler}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
+                    <SelectValue
+                      placeholder={
+                        dataTransaksi
+                          ? capitalizeFirstLetter(
+                              category.filter(
+                                (data: any) =>
+                                  data._id == dataTransaksi.kategoriId
+                              )[0].nama
+                            )
+                          : "Select Category..."
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {category &&
