@@ -37,10 +37,6 @@ const DashboardPage = () => {
     getTransactions(kegiatanId);
   }, [triggerGetNewTransaksi]);
 
-  if (transaksi.length == 0) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
       <h1>DASHBOARD PAGE</h1>
