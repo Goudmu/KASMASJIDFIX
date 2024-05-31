@@ -4,6 +4,10 @@ import "./globals.css";
 
 import { cn } from "@/lib/utils";
 
+// TOASTIFY NOTIFICATION
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -28,6 +32,11 @@ export default function RootLayout({
         )}
       >
         <div className=" max-w-[80%] m-auto">{children}</div>
+        <ToastContainer
+          position="bottom-right"
+          theme="light"
+          autoClose={1500}
+        />
       </body>
     </html>
   );

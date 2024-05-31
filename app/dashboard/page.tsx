@@ -3,10 +3,12 @@ import TableDashboard from "@/components/own/dashboard/table";
 import { TransactionType, KategoriType } from "@/lib/mongodb/models";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { kegiatanIDStore } from "../store/zustand";
 
 const DashboardPage = () => {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
-  const kegiatanId = useSearchParams().getAll("id")[0];
+  // const kegiatanId = useSearchParams().getAll("id")[0];
+  const kegiatanId = kegiatanIDStore((state: any) => state.kegiatanID);
 
   async function getTransactions(searchParams: any) {
     const res = await fetch(`/api/transaksi/perKegiatan?id=${searchParams}`, {
