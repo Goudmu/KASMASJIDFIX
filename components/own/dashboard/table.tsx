@@ -35,7 +35,7 @@ export default function TableDashboard({
 }: {
   transaksi: TransactionType[];
 }) {
-  const [thisTransaksi, setThisTransaksi] = useState(transaksi);
+  // const [thisTransaksi, setThisTransaksi] = useState(transaksi);
   const [searchInput, setSearchInput] = useState("");
   const [monthFilter, setMonthFilter] = useState(getMonthsArray());
   const [yearFilter, setYearFilter] = useState(getYearsArray());
@@ -141,18 +141,18 @@ export default function TableDashboard({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {thisTransaksi &&
-            thisTransaksi.map((data, index) => {
+          {transaksi &&
+            transaksi.map((data, index) => {
               // CHANGE DATE TO LOCAL DATE
-              const newDate = new Date(data.date);
-              const formattedDate = newDate.toLocaleDateString();
+              const newDates = new Date(data.date);
+              const formattedDate = newDates.toLocaleDateString();
 
               // SEARCH FITUR
               if (data.desc.includes(searchInput) || searchInput == "") {
                 // MONTH AND YEAR FILTER
                 if (
-                  newDate.getMonth() == selectedMonth.id &&
-                  newDate.getFullYear() == selectedYear.id
+                  newDates.getMonth() == selectedMonth.id &&
+                  newDates.getFullYear() == selectedYear.id
                 ) {
                   return (
                     <TableRow key={index}>
