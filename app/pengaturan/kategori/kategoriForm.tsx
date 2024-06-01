@@ -2,6 +2,7 @@
 import { kegiatanIDStore } from "@/app/store/zustand";
 import InputKategori from "@/components/own/kategori/form/inputKategori";
 import TableKategori from "@/components/own/kategori/table/tableKategori";
+import { BukuKasType, KategoriType } from "@/lib/mongodb/models";
 import { useEffect, useState } from "react";
 
 const KategoriForm = () => {
@@ -14,7 +15,11 @@ const KategoriForm = () => {
       cache: "no-store",
     })
       .then((res) => res.json())
-      .then(({ kategori }) => {
+      .then(({ kategori, kegiatan }) => {
+        kategori.map((data: any) => {
+          // TAMBAH NAMA KEGIATAN
+          data.kegiatanName = kegiatan.name;
+        });
         setKategoriSetting(kategori);
       });
   };

@@ -1,8 +1,15 @@
 import { create } from "zustand";
+import Cookies from "js-cookie";
 
 export const kegiatanIDStore = create((set) => ({
-  kegiatanID: "660bb7ea285c3316e6c93ec7",
-  setKegiatanID: (newID: any) => set({ kegiatanID: newID }),
+  kegiatanID: Cookies.get("kegiatanID") || "660bb7ea285c3316e6c93ec7",
+  setKegiatanID: (newID: any) => {
+    // Update the Zustand state
+    set({ kegiatanID: newID });
+
+    // Update the cookie
+    Cookies.set("kegiatanID", newID, { expires: 7 }); // Expires in 7 days
+  },
 }));
 
 export const userIDStore = create((set, get) => ({

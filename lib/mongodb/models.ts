@@ -108,6 +108,7 @@ const kategoriSchema2 = new Schema(
 );
 
 export type KategoriType = {
+  kegiatanName: any;
   _id: string;
   nama: string;
   tipe: string;
