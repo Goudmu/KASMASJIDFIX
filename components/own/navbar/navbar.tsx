@@ -36,7 +36,7 @@ export default function NavbarComponent() {
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           <Link
-            href="#"
+            href="/"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
           >
@@ -74,7 +74,7 @@ export default function NavbarComponent() {
           <SheetContent side="left">
             <div className="grid gap-4 p-4">
               <Link
-                href="#"
+                href="/"
                 className="flex items-center gap-2 text-lg font-medium"
                 prefetch={false}
               >

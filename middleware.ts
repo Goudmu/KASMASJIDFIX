@@ -34,6 +34,6 @@ export const config = {
      * - API routes '/api/*'
      * - Next.js static files (/_next/static/*)
      */
-    "/((?!api|_next/static|public|favicon.ico).*)",
+    "/((?!api|_next/static|public|privacypolicy|terms|favicon.ico).*)",
   ],
 };

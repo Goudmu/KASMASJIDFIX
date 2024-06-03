@@ -42,14 +42,14 @@ export default function Component() {
         <p className="text-sm">&copy; 2024 Masjid Agung Gamping</p>
         <nav className="flex items-center gap-4">
           <Link
-            href="#"
+            href="/terms"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
           >
             Terms of Service
           </Link>
           <Link
-            href="#"
+            href="/privacypolicy"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
           >
