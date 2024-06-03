@@ -36,6 +36,10 @@ export const options = {
             delete foundUser.password;
             return foundUser;
           }
+          if (!foundUser) {
+            console.error("Invalid username or password");
+            throw new Error("Invalid username or password");
+          }
         } catch (error: any) {
           console.log(error);
           throw new Error(error);
@@ -47,6 +51,7 @@ export const options = {
   pages: {
     signIn: "/",
   },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }: { token: any; user?: any }) {
       if (user) {
@@ -58,15 +63,8 @@ export const options = {
       if (session?.user) {
         // Access the JWT token from the user object
         const jwtToken = session.user.jwt;
-
-        // Use the JWT token as needed
-        console.log("JWT Token:", jwtToken);
       }
       return session;
-    },
-    async redirect() {
-      // Customize the URL to which the user is redirected after login
-      return "/dashboard"; // Redirect to the dashboard page after login
     },
   },
 };

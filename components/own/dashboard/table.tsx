@@ -22,7 +22,7 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import { TransactionType } from "@/lib/mongodb/models";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   capitalizeFirstLetter,
   commafy,
@@ -59,6 +59,10 @@ export default function TableDashboard({
   const [saldoAwal, setSaldoAwal] = useState(0);
   const [penerimaanBulanIni, setpenerimaanBulanIni] = useState(0);
   const [pengeluaranBulanIni, setpengeluaranBulanIni] = useState(0);
+
+  useEffect(() => {
+    saldoAwalHandler({ month: selectedMonth.id, year: selectedYear.id });
+  }, [transaksi]);
 
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -174,7 +178,7 @@ export default function TableDashboard({
       </div>
       {/* TABLE AND FILTER */}
       <div className="border rounded-lg">
-        <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-4">
+        <div className="flex items-center justify-between bg-white  p-4">
           <div className="flex items-center gap-2">
             <Input
               className="max-w-[200px] sm:max-w-[300px]"
@@ -245,7 +249,7 @@ export default function TableDashboard({
             </DropdownMenu>
           </div>
         </div>
-        <Table>
+        <Table className=" bg-white">
           <TableHeader>
             <TableRow>
               <TableHead className=" w-[10%]">Date</TableHead>
@@ -321,7 +325,7 @@ export default function TableDashboard({
                 }
               })}
           </TableBody>
-          <TableFooter>
+          <TableFooter className=" bg-white">
             <TableRow>
               <TableCell colSpan={4}>Saldo Awal Bulan Ini</TableCell>
               <TableCell colSpan={2}>Rp{commafy(saldoAwal)}</TableCell>

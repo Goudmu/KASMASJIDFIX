@@ -50,7 +50,7 @@ const DashboardPage = () => {
   }, [triggerGetNewTransaksi]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 max-w-[90vw] m-auto">
       {/* NAME AND INPUT TRANSAKSI */}
       <div className=" flex justify-between mt-8">
         <div className=" flex justify-center items-center">

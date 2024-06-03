@@ -1,20 +1,17 @@
 "use client";
 import Link from "next/link";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import SignIn from "@/components/own/home/login";
+import HomeProvider from "@/components/own/home/homeProvider";
 
 export default function Component() {
   return (
-    <div className="flex flex-col min-h-[100dvh]">
-      <main className="flex-1 bg-gray-100 dark:bg-gray-950">
+    <div className="flex flex-col min-h-[95vh]">
+      <main className="flex-1 bg-gray-100 dark:bg-gray-950 ">
         <section className="container mx-auto py-12 md:py-24 px-4 md:px-6">
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Welcome to Masjid Al-Haram
+                Welcome to Masjid Agung Gamping
               </h1>
               <p className="text-gray-500 dark:text-gray-400 text-lg">
                 Discover the rich history and vibrant community of our beloved
@@ -37,12 +34,12 @@ export default function Component() {
                 </Link>
               </div>
             </div>
-            <SignIn />
+            <HomeProvider />
           </div>
         </section>
       </main>
-      <footer className="bg-gray-900 text-white px-4 lg:px-6 py-6 flex items-center justify-between">
-        <p className="text-sm">&copy; 2024 Masjid Al-Haram</p>
+      <footer className="bg-gray-900 text-white px-4 lg:px-6 py-6 flex items-center justify-between h-[5vh]">
+        <p className="text-sm">&copy; 2024 Masjid Agung Gamping</p>
         <nav className="flex items-center gap-4">
           <Link
             href="#"

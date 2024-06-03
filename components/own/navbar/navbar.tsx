@@ -15,16 +15,26 @@ export default function NavbarComponent() {
     }
   }, []);
   if (isloading) {
-    return <div>Loading...</div>;
+    return (
+      <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between h-[5vh]">
+        <Link href="/" className="flex items-center gap-2" prefetch={false}>
+          <ChurchIcon className="h-6 w-6" />
+          <span className="text-xl font-bold">Masjid Agung Gamping</span>
+        </Link>
+        <nav className="hidden lg:flex items-center gap-6">
+          <div>Loading...</div>
+        </nav>
+      </header>
+    );
   }
   if (session == null || session == undefined) {
     return (
-      <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between">
-        <Link href="#" className="flex items-center gap-2" prefetch={false}>
+      <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between h-[5vh]">
+        <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <ChurchIcon className="h-6 w-6" />
-          <span className="text-xl font-bold">Masjid Al-Haram</span>
+          <span className="text-xl font-bold">Masjid Agung Gamping</span>
         </Link>
-        <nav className="hidden lg:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-6">
           <Link
             href="#"
             className="text-sm font-medium hover:underline underline-offset-4"
@@ -56,7 +66,7 @@ export default function NavbarComponent() {
         </nav>
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
+            <Button variant="ghost" size="icon" className="md:hidden">
               <MenuIcon className="h-6 w-6" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
@@ -102,21 +112,25 @@ export default function NavbarComponent() {
     );
   } else {
     return (
-      <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between">
-        <Link href="#" className="flex items-center gap-2" prefetch={false}>
+      <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between h-[5vh]">
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2"
+          prefetch={false}
+        >
           <ChurchIcon className="h-6 w-6" />
           <span className="text-xl font-bold">Masjid Agung Gamping</span>
         </Link>
-        <nav className="hidden lg:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-6">
           <Link
-            href="#"
+            href="/"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
           >
             Home
           </Link>
           <Link
-            href="#"
+            href="/dashboard"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
           >
@@ -166,7 +180,7 @@ export default function NavbarComponent() {
         </nav>
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
+            <Button variant="ghost" size="icon" className="md:hidden">
               <MenuIcon className="h-6 w-6" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
