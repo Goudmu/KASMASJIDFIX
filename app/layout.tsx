@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NavbarComponent from "@/components/own/navbar/navbar";
+import NavbarProvider from "@/components/own/navbar/navbarProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -33,7 +34,8 @@ export default function RootLayout({
         )}
       >
         <div className=" max-w-[90%] m-auto">
-          <NavbarComponent />
+          {/* <NavbarComponent /> */}
+          <NavbarProvider />
           {children}
         </div>
         <ToastContainer
