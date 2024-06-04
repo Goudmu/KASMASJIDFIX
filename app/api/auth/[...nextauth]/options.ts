@@ -1,5 +1,6 @@
 import { User2 } from "@/lib/mongodb/models";
-import { AuthOptions } from "next-auth";
+import { Account, AuthOptions, Profile, User } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialProvider from "next-auth/providers/credentials";
 
 export const options: AuthOptions = {
@@ -60,26 +61,31 @@ export const options: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({
-      token,
-      user,
-      trigger,
-      session,
-    }: {
-      token: any;
-      user?: any;
-      trigger: any;
-      session: any;
+    async jwt(params: {
+      token: JWT;
+      user: User | null;
+      account: Account | null;
+      profile?: Profile | undefined; // Update profile to be optional
+      trigger?: "signIn" | "signUp" | "update" | undefined;
+      isNewUser?: boolean | undefined;
+      session?: any;
     }) {
+      const { token, user, trigger, session } = params;
       if (trigger === "update") {
         return { ...token, ...session.user };
       }
       if (user) {
+        if ("username" in user) {
+          token.username = user.username;
+        }
+        if ("role" in user) {
+          token.role = user.role;
+        }
+        if ("password" in user) {
+          token.password = user.password;
+        }
         token.id = user.id;
-        token.username = user.username;
         token.email = user.email;
-        token.role = user.role;
-        token.password = user.password;
       }
       return token;
     },
