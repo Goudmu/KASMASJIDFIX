@@ -21,9 +21,8 @@ const userSchema2 = new Schema(
     img: {
       type: String,
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
+    role: {
+      type: Number,
     },
     isActive: {
       type: Boolean,
@@ -40,6 +39,14 @@ const userSchema2 = new Schema(
     timestamps: true,
   }
 );
+
+export type UserType = {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  role: number;
+};
 
 export type BukuKasType = {
   _id: string;

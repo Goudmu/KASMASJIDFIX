@@ -32,9 +32,9 @@ const InputTransaksi = ({
       <AlertDialog>
         <AlertDialogTrigger asChild>
           {tipe == "edit" ? (
-            <span className=" cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm w-full">
+            <Button variant="secondary" size="xs">
               {capitalizeFirstLetter(tipe)} Kas
-            </span>
+            </Button>
           ) : (
             <Button>Input {capitalizeFirstLetter(tipe)} Kas</Button>
           )}

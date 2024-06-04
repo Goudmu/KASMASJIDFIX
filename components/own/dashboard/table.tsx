@@ -35,6 +35,7 @@ import { Filter, MoreHorizontal } from "lucide-react";
 import { toast } from "react-toastify";
 import InputTransaksi from "./form/inputTransaksi";
 import CardOwn from "./card/card";
+import AlertDelete from "../alertDelete";
 
 export default function TableDashboard({
   transaksi,
@@ -257,7 +258,8 @@ export default function TableDashboard({
               <TableHead className=" w-[50%]">Description</TableHead>
               <TableHead className=" w-[10%]">Category</TableHead>
               <TableHead className=" w-[10%]">Amount</TableHead>
-              <TableHead className=" w-[10%]">Edit / Delete</TableHead>
+              <TableHead className=" w-[5%] text-center">Edit</TableHead>
+              <TableHead className=" w-[5%] text-center">Delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -276,48 +278,35 @@ export default function TableDashboard({
                   ) {
                     return (
                       <TableRow key={index}>
-                        <TableCell>{formattedDate}</TableCell>
-                        <TableCell>
+                        <TableCell className=" py-1">{formattedDate}</TableCell>
+                        <TableCell className=" py-1">
                           {capitalizeFirstLetter(data.tipe)}
                         </TableCell>
-                        <TableCell>{data.desc}</TableCell>
-                        <TableCell>
+                        <TableCell className=" py-1">{data.desc}</TableCell>
+                        <TableCell className=" py-1">
                           {capitalizeFirstLetter(data.kategoriName)}
                         </TableCell>
-                        <TableCell>Rp{commafy(data.amount)}</TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <div className=" w-full cursor-pointer">
-                                <InputTransaksi
-                                  tipe={"edit"}
-                                  kegiatanId={kegiatanId}
-                                  category={category}
-                                  userId={userId}
-                                  dataTransaksi={data}
-                                  triggerGetNewTransaksi={
-                                    triggerGetNewTransaksi
-                                  }
-                                  settriggerGetNewTransaksi={
-                                    settriggerGetNewTransaksi
-                                  }
-                                />
-                              </div>
-                              <DropdownMenuItem
-                                className=" cursor-pointer"
-                                onClick={deleteTransaksiHandler}
-                                id={data._id}
-                              >
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                        <TableCell className=" py-1">
+                          Rp{commafy(data.amount)}
+                        </TableCell>
+                        <TableCell className=" py-1">
+                          <InputTransaksi
+                            tipe={"edit"}
+                            kegiatanId={kegiatanId}
+                            category={category}
+                            userId={userId}
+                            dataTransaksi={data}
+                            triggerGetNewTransaksi={triggerGetNewTransaksi}
+                            settriggerGetNewTransaksi={
+                              settriggerGetNewTransaksi
+                            }
+                          />
+                        </TableCell>
+                        <TableCell className=" py-1">
+                          <AlertDelete
+                            deleteFuntion={deleteTransaksiHandler}
+                            id={data._id}
+                          />
                         </TableCell>
                       </TableRow>
                     );

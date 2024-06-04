@@ -70,3 +70,15 @@ export const thisYear = () => {
   const currentYearIndex = new Date().getFullYear(); // getMonth() returns 0-11 for Jan-Dec
   return getYearsArray().filter((data) => data.id == currentYearIndex)[0];
 };
+
+export const roleUserUtils = (id: number) => {
+  if (id == null) return "0";
+  const roleObject = [
+    { id: 0, name: "user" },
+    { id: 1, name: "admin" },
+    { id: 2, name: "ketua" },
+    { id: 3, name: "sekretaris" },
+    { id: 4, name: "bendehara" },
+  ];
+  return roleObject.filter((data: any) => data.id == id)[0].name;
+};
