@@ -1,4 +1,5 @@
 import { User2 } from "@/lib/mongodb/models";
+import { connectToDB } from "@/lib/mongodb/utils";
 import CredentialProvider from "next-auth/providers/credentials";
 
 export const options = {
@@ -29,6 +30,7 @@ export const options = {
       },
       async authorize(credentials) {
         try {
+          await connectToDB();
           const foundUser = await User2.findOne({
             username: credentials?.username,
           });
