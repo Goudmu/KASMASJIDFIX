@@ -45,8 +45,6 @@ export default function RootLayout({
       >
         <NavbarProvider />
         <MainComponent>{children}</MainComponent>
-        {/* <div className=" max-w-[90%] m-auto">
-        </div> */}
         <ToastContainer
           position="bottom-right"
           theme="light"

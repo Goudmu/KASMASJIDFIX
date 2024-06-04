@@ -59,7 +59,20 @@ export const options = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user }: { token: any; user?: any }) {
+    async jwt({
+      token,
+      user,
+      trigger,
+      session,
+    }: {
+      token: any;
+      user?: any;
+      trigger?: "signIn" | "signUp" | "update" | undefined;
+      session?: any;
+    }) {
+      if (trigger === "update") {
+        return { ...token, ...session.user };
+      }
       if (user) {
         token.id = user.id;
         token.username = user.username;

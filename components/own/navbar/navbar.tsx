@@ -3,17 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function NavbarComponent() {
   const [isloading, setisloading] = useState(true);
   const { data: session } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (session == null) {
       setisloading(false);
     }
   }, []);
+
   if (isloading) {
     return (
       <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between h-[5vh]">
