@@ -154,7 +154,7 @@ export default function NavbarComponent() {
             Pengajian
           </Link>
           <Link
-            href="#"
+            href="/laporan"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
           >
@@ -199,7 +199,7 @@ export default function NavbarComponent() {
                 Home
               </Link>
               <Link
-                href="#"
+                href="/laporan"
                 className="flex items-center gap-2 text-lg font-medium"
                 prefetch={false}
               >

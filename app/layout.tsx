@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NavbarProvider from "@/components/own/navbar/navbarProvider";
 import MainComponent from "@/components/own/afterLogin/mainComponent";
+import Footer from "@/components/own/footer/footer";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -45,6 +46,7 @@ export default function RootLayout({
       >
         <NavbarProvider />
         <MainComponent>{children}</MainComponent>
+        <Footer />
         <ToastContainer
           position="bottom-right"
           theme="light"

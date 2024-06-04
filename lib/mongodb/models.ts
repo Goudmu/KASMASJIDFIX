@@ -121,6 +121,7 @@ export type KategoriType = {
   tipe: string;
   kegiatanId: number;
   statusId: boolean;
+  kategoriTotal: number;
 };
 
 const transaksiSchema2 = new Schema(
