@@ -1,9 +1,9 @@
 import { User2 } from "@/lib/mongodb/models";
-import { AuthOptions, User } from "next-auth";
+import { User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialProvider from "next-auth/providers/credentials";
 
-export const options: AuthOptions = {
+export const options = {
   providers: [
     CredentialProvider({
       name: "Credential",
