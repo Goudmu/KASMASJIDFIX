@@ -1,5 +1,5 @@
 import { User2 } from "@/lib/mongodb/models";
-import { Account, AuthOptions, Profile, User } from "next-auth";
+import { AuthOptions, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialProvider from "next-auth/providers/credentials";
 
@@ -64,10 +64,7 @@ export const options: AuthOptions = {
     async jwt(params: {
       token: JWT;
       user: User | null;
-      account: Account | null;
-      profile?: Profile | undefined; // Update profile to be optional
       trigger?: "signIn" | "signUp" | "update" | undefined;
-      isNewUser?: boolean | undefined;
       session?: any;
     }) {
       const { token, user, trigger, session } = params;
