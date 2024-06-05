@@ -1,40 +1,32 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    href: string;
-    title: string;
-  }[];
+interface SidebarNavItem {
+  title: string;
+  href: string;
 }
 
-export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
-  const pathname = usePathname();
+interface SidebarNavProps {
+  items: SidebarNavItem[];
+  activeItem: string;
+  onClick: (href: string) => void;
+}
+
+export function SidebarNav({ items, activeItem, onClick }: SidebarNavProps) {
+  const router = useRouter();
 
   return (
-    <nav
-      className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className
-      )}
-      {...props}
-    >
+    <nav className="space-y-2">
       {items.map((item) => (
         <Link
           key={item.href}
-          href={`${item.href}`}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            pathname === item.href
-              ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start"
-          )}
+          href={item.href}
+          className={`block p-2 rounded ${
+            item.href === activeItem
+              ? "bg-white text-black"
+              : "hover:bg-gray-200"
+          }`}
+          onClick={() => onClick(item.href)}
         >
           {item.title}
         </Link>

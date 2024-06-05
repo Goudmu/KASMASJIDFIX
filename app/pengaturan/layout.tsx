@@ -1,13 +1,8 @@
-import { Metadata } from "next";
-import Image from "next/image";
-
+"use client";
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "./sidebar/sidebar";
-
-export const metadata: Metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
-};
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 const sidebarNavItems = [
   {
@@ -22,6 +17,10 @@ const sidebarNavItems = [
     title: "Kategori",
     href: "/pengaturan/kategori",
   },
+  {
+    title: "Tanda Tangan",
+    href: "/pengaturan/signature",
+  },
 ];
 
 interface SettingsLayoutProps {
@@ -29,6 +28,12 @@ interface SettingsLayoutProps {
 }
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
+  const pathname = usePathname();
+  const [activeItem, setActiveItem] = useState(pathname);
+
+  const handleItemClick = (href: string) => {
+    setActiveItem(href);
+  };
   return (
     <>
       <div className=" space-y-6 p-10 pb-16 ">
@@ -38,7 +43,11 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
         <Separator className="my-6" />
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <aside className="-mx-4 lg:w-1/5">
-            <SidebarNav items={sidebarNavItems} />
+            <SidebarNav
+              items={sidebarNavItems}
+              activeItem={activeItem}
+              onClick={handleItemClick}
+            />
           </aside>
           <div className="flex-1">{children}</div>
         </div>

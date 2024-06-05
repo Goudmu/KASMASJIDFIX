@@ -52,7 +52,7 @@ export default function NavbarComponent() {
           >
             Report
           </Link>
-          <Link
+          {/* <Link
             href="#"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
@@ -65,7 +65,7 @@ export default function NavbarComponent() {
             prefetch={false}
           >
             Lecture
-          </Link>
+          </Link> */}
           {session && (
             <Link
               href="/dashboard"
@@ -155,7 +155,7 @@ export default function NavbarComponent() {
           >
             Transaksi
           </Link>
-          <Link
+          {/* <Link
             href="#"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
@@ -168,7 +168,7 @@ export default function NavbarComponent() {
             prefetch={false}
           >
             Pengajian
-          </Link>
+          </Link> */}
           <Link
             href="/laporan"
             className="text-sm font-medium hover:underline underline-offset-4"
