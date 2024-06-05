@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenuTrigger,
@@ -24,11 +23,13 @@ import {
 import {
   BukuKasType,
   KategoriType,
+  SignatureType,
   TransactionType,
 } from "@/lib/mongodb/models";
 import React, { useEffect, useState } from "react";
 import {
   capitalizeFirstLetter,
+  chunkArray,
   commafy,
   getMonthsArray,
   getYearsArray,
@@ -44,6 +45,7 @@ import "jspdf-autotable";
 
 export default function TablePerBulan() {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
+  const [signature, setSignature] = useState<SignatureType[][]>([]);
   const [monthFilter, setMonthFilter] = useState(getMonthsArray());
   const [yearFilter, setYearFilter] = useState(getYearsArray());
   const [selectedMonth, setSelectedMonth] = useState(thisMonth());
@@ -83,8 +85,21 @@ export default function TablePerBulan() {
     });
   };
 
+  const getSignatureData = async () => {
+    const res = await fetch("/api/signature", {
+      cache: "no-store",
+    });
+    const { signature } = await res.json();
+    const chunkedArray = [];
+    for (let i = 0; i < signature.length; i += 2) {
+      chunkedArray.push(signature.slice(i, i + 2));
+    }
+    setSignature(chunkedArray);
+  };
+
   useEffect(() => {
     getTransaksiData();
+    getSignatureData();
   }, []);
 
   const saldoAwalHandler = ({ month, year, transaksi }: any) => {
@@ -159,7 +174,6 @@ export default function TablePerBulan() {
       transaksi: transaksi,
     });
   };
-
   const exportPdfHandler = () => {
     const doc = new jsPDF({
       orientation: "portrait",
@@ -189,6 +203,40 @@ export default function TablePerBulan() {
         textColor: [30, 30, 30], // Black color for footer text
         lineWidth: 0.5, // Add border for footer
         lineColor: [0, 0, 0], // Black color for footer border
+      },
+      willDrawPage: function (data) {
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(40);
+        doc.text(title, 10, 10);
+      },
+    });
+    autoTable(doc, {
+      // styles: { fillColor: [255, 255, 255] },
+      html: "#tablesignature",
+      theme: "grid",
+      margin: { top: 5, left: 10, right: 10, bottom: 30 },
+      styles: {
+        halign: "center", // horizontal align center
+      },
+      columnStyles: {
+        0: { halign: "center" }, // optional, if you want to center only specific columns
+        1: { halign: "center" },
+      },
+      headStyles: {
+        fillColor: [255, 255, 255], // Black color for header background
+        textColor: [30, 30, 30], // White color for header text
+        halign: "center",
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255], // White color for body background
+        textColor: [30, 30, 30], // Black color for body text
+        lineWidth: 0, // Add border for body
+        lineColor: [255, 255, 255], // Black color for body border
+      },
+      footStyles: {
+        fillColor: [255, 255, 255], // White color for footer background
+        textColor: [30, 30, 30], // Black color for footer text
       },
       willDrawPage: function (data) {
         // Header
@@ -371,7 +419,63 @@ export default function TablePerBulan() {
                   )}
                 </TableCell>
               </TableRow>
+
+              {/* {signature &&
+                signature
+                  .reduce((acc, data, index, array) => {
+                    if (index % 2 === 0) {
+                      acc.push(array.slice(index, index + 2));
+                    }
+                    return acc;
+                  }, [] as SignatureType[][])
+                  .map((pair, idx) => (
+                    <TableRow key={idx}>
+                      {pair.map((data) => (
+                        <TableCell
+                          key={data._id}
+                          className="py-2 text-center"
+                          colSpan={2}
+                        >
+                          <div>
+                            <div>{data.role}</div>
+                            <div className="flex items-center justify-center">
+                              <img src={data.signature} alt="Signature" />
+                            </div>
+                            <div>{capitalizeFirstLetter(data.name)}</div>
+                          </div>
+                        </TableCell>
+                      ))}
+                      {pair.length === 1 && (
+                        <TableCell className="py-2 text-center" />
+                      )}{" "}
+                    </TableRow>
+                  ))} */}
             </TableFooter>
+          </Table>
+          {/* SIGNATURE */}
+          <Table id="tablesignature">
+            <TableBody>
+              {signature &&
+                signature.map((data, index) => {
+                  return (
+                    <TableRow key={index}>
+                      {data.map((data2, index2) => {
+                        return (
+                          <TableCell className=" text-center" key={index2}>
+                            <div className=" flex flex-col items-center justify-center">
+                              <span>{capitalizeFirstLetter(data2.role)}</span>
+                              <div className=" flex items-center justify-center">
+                                <img src={data2.signature} alt="Signature" />
+                              </div>
+                              <span>{capitalizeFirstLetter(data2.name)}</span>
+                            </div>
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
           </Table>
         </div>
       </div>

@@ -110,3 +110,11 @@ export const roleUserUtils = (id: number) => {
   ];
   return roleObject.filter((data: any) => data.id == id)[0].name;
 };
+
+export function chunkArray(array: string | any[], size: number) {
+  const chunkedArray = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunkedArray.push(array.slice(i, i + size));
+  }
+  return chunkedArray;
+}
