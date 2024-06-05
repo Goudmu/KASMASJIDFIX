@@ -1,6 +1,5 @@
 import Link from "next/link";
 import TablePerBulan from "@/components/own/laporan/perbulan/tablePerBulan";
-import ComponentFilterLaporanPerBulan from "@/components/own/laporan/perbulan/filterLaporanPerBulan";
 
 export default function LaporanPage() {
   return (
