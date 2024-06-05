@@ -41,7 +41,7 @@ export default function NavbarComponent() {
           <Link
             href="/"
             className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={true}
+            prefetch={false}
           >
             Home
           </Link>
@@ -142,12 +142,13 @@ export default function NavbarComponent() {
           <span className="text-xl font-bold">Masjid Agung Gamping</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
-          <a
+          <Link
             href="/"
             className="text-sm font-medium hover:underline underline-offset-4"
+            prefetch={false}
           >
             Home
-          </a>
+          </Link>
           <Link
             href="/dashboard"
             className="text-sm font-medium hover:underline underline-offset-4"
@@ -184,7 +185,7 @@ export default function NavbarComponent() {
             Pengaturan
           </Link>
           <Link
-            href="#"
+            href="/"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
           >
