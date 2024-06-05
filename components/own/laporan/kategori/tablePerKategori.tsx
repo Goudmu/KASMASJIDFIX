@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenuTrigger,
@@ -21,9 +20,14 @@ import {
   Table,
   TableFooter,
 } from "@/components/ui/table";
-import { KategoriType, TransactionType } from "@/lib/mongodb/models";
+import {
+  KategoriType,
+  SignatureType,
+  TransactionType,
+} from "@/lib/mongodb/models";
 import React, { useEffect, useState } from "react";
 import {
+  addPrintShortcut,
   capitalizeFirstLetter,
   commafy,
   getMonthsArray,
@@ -31,12 +35,11 @@ import {
   thisMonth,
   thisYear,
 } from "@/lib/utils";
-import CardOwn from "../../dashboard/card/card";
 import { kegiatanIDStore } from "@/app/store/zustand";
-import { generatePDF } from "@/lib/pdfgenerator";
 
 export default function TablePerKategori() {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
+  const [signature, setSignature] = useState<SignatureType[][]>([]);
   const [kategori, setKategori] = useState<KategoriType[]>([]);
   const [monthFilter, setMonthFilter] = useState(getMonthsArray());
   const [yearFilter, setYearFilter] = useState(getYearsArray());
@@ -103,8 +106,22 @@ export default function TablePerKategori() {
     });
   };
 
+  const getSignatureData = async () => {
+    const res = await fetch("/api/signature", {
+      cache: "no-store",
+    });
+    const { signature } = await res.json();
+    const chunkedArray = [];
+    for (let i = 0; i < signature.length; i += 2) {
+      chunkedArray.push(signature.slice(i, i + 2));
+    }
+    setSignature(chunkedArray);
+  };
+
   useEffect(() => {
     getTransaksiData();
+    getSignatureData();
+    addPrintShortcut();
   }, []);
 
   const saldoAwalHandler = ({ month, year, transaksi }: any) => {
@@ -180,8 +197,23 @@ export default function TablePerKategori() {
     });
   };
 
-  const exportPdfHandler = () => {
-    generatePDF("table");
+  const exportHandler = (e: any) => {
+    e.preventDefault();
+    let myDiv = document.getElementById("mainpdf")?.innerHTML;
+    let oldPage = document.body.innerHTML;
+    document.body.innerHTML =
+      "<html><head><title></title></head><body>" + myDiv + "</body>";
+
+    // Print the content
+    window.print();
+
+    // Restore the original content
+    document.body.innerHTML = oldPage;
+
+    // Reload the page after a short delay to ensure the print dialog has closed
+    setTimeout(() => {
+      location.reload();
+    }, 100); // Adjust the delay as needed
   };
 
   return (
@@ -190,7 +222,9 @@ export default function TablePerKategori() {
       <div className="border rounded-lg">
         <div className="flex items-center justify-between bg-white  p-4">
           <div className="flex items-center gap-2">
-            <Button onClick={exportPdfHandler}>Export To Pdf</Button>
+            <Button onClick={exportHandler} type="submit">
+              Export PDF
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="flex items-center gap-1" variant="outline">
@@ -253,101 +287,121 @@ export default function TablePerKategori() {
             </DropdownMenu>
           </div>
         </div>
-        <Table className=" bg-white" id="table">
-          <TableHeader>
-            <TableRow>
-              <TableHead className=" w-[10%]">Date</TableHead>
-              <TableHead className=" w-[50%]">Description</TableHead>
-              <TableHead className=" w-[10%]">Jumlah</TableHead>
-              <TableHead className=" w-[10%]">Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell colSpan={3} className=" py-1">
-                Saldo Awal Bulan Ini
-              </TableCell>
-              <TableCell className=" py-1">Rp{commafy(saldoAwal)}</TableCell>
-            </TableRow>
-            {kategori &&
-              kategori.map((kategoriData: KategoriType, index: number) => {
-                let thisKategoriTotal = 0;
-                return (
-                  <React.Fragment key={index}>
-                    <TableRow>
-                      <TableCell colSpan={4} className=" py-1">
-                        {capitalizeFirstLetter(kategoriData.nama)}
-                      </TableCell>
-                    </TableRow>
-                    {transaksi &&
-                      transaksi.map((data, index) => {
-                        // CHANGE DATE TO LOCAL DATE
-                        const newDates = new Date(data.date);
-                        const formattedDate =
-                          newDates.toLocaleDateString("en-GB");
+        <main id="mainpdf">
+          {/* TRANSAKSI PER KATEGORI */}
+          <Table className=" bg-white" id="table">
+            <TableHeader>
+              <TableRow>
+                <TableHead className=" w-[10%]">Tanggal</TableHead>
+                <TableHead className=" w-[50%]">Deskripsi</TableHead>
+                <TableHead className=" w-[10%]">Jumlah</TableHead>
+                <TableHead className=" w-[10%]">Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={3} className=" py-1">
+                  Saldo Awal Bulan Ini
+                </TableCell>
+                <TableCell className=" py-1">Rp{commafy(saldoAwal)}</TableCell>
+              </TableRow>
+              {kategori &&
+                kategori.map((kategoriData: KategoriType, index: number) => {
+                  let thisKategoriTotal = 0;
+                  return (
+                    <React.Fragment key={index}>
+                      <TableRow>
+                        <TableCell colSpan={4} className=" py-1 font-bold">
+                          {capitalizeFirstLetter(kategoriData.nama)}
+                        </TableCell>
+                      </TableRow>
+                      {transaksi &&
+                        transaksi.map((data, index) => {
+                          // CHANGE DATE TO LOCAL DATE
+                          const newDates = new Date(data.date);
+                          const formattedDate =
+                            newDates.toLocaleDateString("en-GB");
 
-                        // MONTH AND YEAR FILTER
-                        if (
-                          newDates.getMonth() == selectedMonth.id &&
-                          newDates.getFullYear() == selectedYear.id &&
-                          data.kategoriId == kategoriData._id
-                        ) {
-                          thisKategoriTotal += data.amount;
+                          // MONTH AND YEAR FILTER
+                          if (
+                            newDates.getMonth() == selectedMonth.id &&
+                            newDates.getFullYear() == selectedYear.id &&
+                            data.kategoriId == kategoriData._id
+                          ) {
+                            thisKategoriTotal += data.amount;
+                            return (
+                              <TableRow key={index}>
+                                <TableCell className=" py-1">
+                                  {formattedDate}
+                                </TableCell>
+                                <TableCell className=" py-1">
+                                  {capitalizeFirstLetter(data.desc)}
+                                </TableCell>
+                                <TableCell className=" py-1">
+                                  Rp{commafy(data.amount)}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          }
+                        })}
+                      <TableRow className=" font-bold">
+                        <TableCell colSpan={2} className=" py-1 ">
+                          {`Total Saldo ${capitalizeFirstLetter(
+                            kategoriData.nama
+                          )}`}
+                        </TableCell>
+                        <TableCell className=" py-1">
+                          Rp{commafy(thisKategoriTotal)}
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={4}></TableCell>
+                      </TableRow>
+                    </React.Fragment>
+                  );
+                })}
+            </TableBody>
+            <TableFooter className=" bg-white">
+              <TableRow className=" font-bold">
+                <TableCell colSpan={3} className=" py-1">
+                  Saldo Akhir Bulan Ini
+                </TableCell>
+                <TableCell className=" py-1">
+                  Rp
+                  {commafy(
+                    saldoAwal + penerimaanBulanIni + pengeluaranBulanIni
+                  )}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+          {/* SIGNATURE */}
+          <Table id="tablesignature" className="bg-white">
+            <TableBody>
+              {signature &&
+                signature.map((data, index) => {
+                  return (
+                    <TableRow key={index} className=" border-none">
+                      {data &&
+                        data.map((data2: SignatureType) => {
                           return (
-                            <TableRow key={index}>
-                              <TableCell className=" py-1">
-                                {formattedDate}
-                              </TableCell>
-                              <TableCell className=" py-1">
-                                {capitalizeFirstLetter(data.desc)}
-                              </TableCell>
-                              <TableCell className=" py-1">
-                                Rp{commafy(data.amount)}
-                              </TableCell>
-                            </TableRow>
+                            <TableCell className=" text-center" key={data2._id}>
+                              <div className=" flex flex-col items-center justify-center">
+                                <span>{capitalizeFirstLetter(data2.role)}</span>
+                                <div className=" flex items-center justify-center">
+                                  <img src={data2.signature} alt="Signature" />
+                                </div>
+                                <span>{capitalizeFirstLetter(data2.name)}</span>
+                              </div>
+                            </TableCell>
                           );
-                        }
-                      })}
-                    <TableRow className=" font-bold">
-                      <TableCell colSpan={2} className=" py-1 ">
-                        {`Total Saldo ${capitalizeFirstLetter(
-                          kategoriData.nama
-                        )}`}
-                      </TableCell>
-                      <TableCell className=" py-1">
-                        Rp{commafy(thisKategoriTotal)}
-                      </TableCell>
+                        })}
                     </TableRow>
-                    <TableRow>
-                      <TableCell colSpan={4}></TableCell>
-                    </TableRow>
-                  </React.Fragment>
-                );
-              })}
-          </TableBody>
-          <TableFooter className=" bg-white">
-            {/* <TableRow>
-              <TableCell colSpan={1} className=" py-1">
-                Total
-              </TableCell>
-              <TableCell className=" py-1">
-                Rp{commafy(penerimaanBulanIni)}
-              </TableCell>
-              <TableCell className=" py-1">
-                Rp{commafy(pengeluaranBulanIni)}
-              </TableCell>
-            </TableRow> */}
-            <TableRow>
-              <TableCell colSpan={3} className=" py-1">
-                Saldo Akhir Bulan Ini
-              </TableCell>
-              <TableCell className=" py-1">
-                Rp
-                {commafy(saldoAwal + penerimaanBulanIni + pengeluaranBulanIni)}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </main>
       </div>
     </div>
   );

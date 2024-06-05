@@ -118,3 +118,24 @@ export function chunkArray(array: string | any[], size: number) {
   }
   return chunkedArray;
 }
+
+import hotkeys from "hotkeys-js";
+
+export function addPrintShortcut() {
+  hotkeys("ctrl+p", function (event, handler) {
+    event.preventDefault();
+    let myDiv = document.getElementById("mainpdf")?.innerHTML;
+    let oldPage = document.body.innerHTML;
+    document.body.innerHTML =
+      "<html><head><title></title></head><body>" + myDiv + "</body>";
+    window.print();
+    document.body.innerHTML = oldPage;
+    window.addEventListener(
+      "afterprint",
+      function () {
+        location.reload();
+      },
+      false
+    );
+  });
+}

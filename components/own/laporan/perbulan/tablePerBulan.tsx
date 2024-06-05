@@ -9,28 +9,14 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuContent,
   DropdownMenu,
-  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-  Table,
-  TableFooter,
-} from "@/components/ui/table";
-import {
-  BukuKasType,
   KategoriType,
   SignatureType,
   TransactionType,
 } from "@/lib/mongodb/models";
 import React, { useEffect, useState } from "react";
 import {
-  capitalizeFirstLetter,
-  chunkArray,
-  commafy,
   getMonthsArray,
   getYearsArray,
   thisMonth,
@@ -38,10 +24,7 @@ import {
   thisYear,
 } from "@/lib/utils";
 import { kegiatanIDStore } from "@/app/store/zustand";
-// PDF
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import "jspdf-autotable";
+import LaporanPerBulanTable from "./table";
 
 export default function TablePerBulan() {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
@@ -174,88 +157,38 @@ export default function TablePerBulan() {
       transaksi: transaksi,
     });
   };
-  const exportPdfHandler = () => {
-    const doc = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
+  const exportHandler = (e: any) => {
+    e.preventDefault();
+    let myDiv = document.getElementById("mainpdf")?.innerHTML;
+    let oldPage = document.body.innerHTML;
+    document.body.innerHTML =
+      "<html><head><title></title></head><body>" + myDiv + "</body>";
 
-    autoTable(doc, {
-      // styles: { fillColor: [255, 255, 255] },
-      html: "#table",
-      theme: "grid",
-      margin: { top: 30, left: 10, right: 10, bottom: 30 },
-      headStyles: {
-        fillColor: [255, 255, 255], // Black color for header background
-        textColor: [30, 30, 30], // White color for header text
-        lineWidth: 0.5, // Add border for header
-        lineColor: [0, 0, 0], // Black color for header border
-      },
-      bodyStyles: {
-        fillColor: [255, 255, 255], // White color for body background
-        textColor: [30, 30, 30], // Black color for body text
-        lineWidth: 0.5, // Add border for body
-        lineColor: [0, 0, 0], // Black color for body border
-      },
-      footStyles: {
-        fillColor: [255, 255, 255], // White color for footer background
-        textColor: [30, 30, 30], // Black color for footer text
-        lineWidth: 0.5, // Add border for footer
-        lineColor: [0, 0, 0], // Black color for footer border
-      },
-      willDrawPage: function (data) {
-        // Header
-        doc.setFontSize(20);
-        doc.setTextColor(40);
-        doc.text(title, 10, 10);
-      },
-    });
-    autoTable(doc, {
-      // styles: { fillColor: [255, 255, 255] },
-      html: "#tablesignature",
-      theme: "grid",
-      margin: { top: 5, left: 10, right: 10, bottom: 30 },
-      styles: {
-        halign: "center", // horizontal align center
-      },
-      columnStyles: {
-        0: { halign: "center" }, // optional, if you want to center only specific columns
-        1: { halign: "center" },
-      },
-      headStyles: {
-        fillColor: [255, 255, 255], // Black color for header background
-        textColor: [30, 30, 30], // White color for header text
-        halign: "center",
-      },
-      bodyStyles: {
-        fillColor: [255, 255, 255], // White color for body background
-        textColor: [30, 30, 30], // Black color for body text
-        lineWidth: 0, // Add border for body
-        lineColor: [255, 255, 255], // Black color for body border
-      },
-      footStyles: {
-        fillColor: [255, 255, 255], // White color for footer background
-        textColor: [30, 30, 30], // Black color for footer text
-      },
-      willDrawPage: function (data) {
-        // Header
-        doc.setFontSize(20);
-        doc.setTextColor(40);
-        doc.text(title, 10, 10);
-      },
-    });
+    // Print the content
+    window.print();
 
-    doc.save("table.pdf");
+    // Restore the original content
+    document.body.innerHTML = oldPage;
+
+    // Reload the page after a short delay to ensure the print dialog has closed
+    setTimeout(() => {
+      location.reload();
+    }, 100); // Adjust the delay as needed
   };
+
+  if (transaksi == undefined || signature == undefined) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className=" flex flex-col gap-3 mb-10">
-      {/* TABLE AND FILTER */}
+      {/* TABLE */}
       <div className="flex flex-col gap-5">
         <div className="flex items-center justify-between bg-white  p-4">
           <div className="flex items-center gap-2">
-            <Button onClick={exportPdfHandler}>Export To Pdf</Button>
+            <Button onClick={exportHandler} type="submit">
+              Export PDF
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="flex items-center gap-1" variant="outline">
@@ -318,166 +251,15 @@ export default function TablePerBulan() {
             </DropdownMenu>
           </div>
         </div>
-        <div className="bg-white">
-          <Table className=" border rounded-md" id="table">
-            <TableHeader>
-              <TableRow>
-                <TableHead className=" w-[10%]">Date</TableHead>
-                <TableHead className=" w-[50%]">Description</TableHead>
-                <TableHead className=" w-[10%]">Penerimaan</TableHead>
-                <TableHead className=" w-[10%]">Pengeluaran</TableHead>
-                <TableHead className=" w-[10%]">Total</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={4} className=" py-1">
-                  Saldo Awal Bulan Ini
-                </TableCell>
-                <TableCell className=" py-1">Rp{commafy(saldoAwal)}</TableCell>
-              </TableRow>
-              {/* PENERIMAAN */}
-              <TableRow>
-                <TableCell colSpan={5} className=" py-1">
-                  Penerimaan
-                </TableCell>
-              </TableRow>
-              {transaksi &&
-                transaksi.map((data, index) => {
-                  // CHANGE DATE TO LOCAL DATE
-                  const newDates = new Date(data.date);
-                  const formattedDate = newDates.toLocaleDateString("en-GB");
-
-                  // MONTH AND YEAR FILTER
-                  if (
-                    newDates.getMonth() == selectedMonth.id &&
-                    newDates.getFullYear() == selectedYear.id &&
-                    data.tipe == "penerimaan"
-                  ) {
-                    return (
-                      <TableRow key={index}>
-                        <TableCell className=" py-1">{formattedDate}</TableCell>
-                        <TableCell className=" py-1">{data.desc}</TableCell>
-                        <TableCell className=" py-1">
-                          Rp{commafy(data.amount)}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-                })}
-              {/* PENGELUARAN */}
-              <TableRow>
-                <TableCell colSpan={5} className=" py-1">
-                  Pengeluaran
-                </TableCell>
-              </TableRow>
-              {transaksi &&
-                transaksi.map((data, index) => {
-                  // CHANGE DATE TO LOCAL DATE
-                  const newDates = new Date(data.date);
-                  const formattedDate = newDates.toLocaleDateString("en-GB");
-
-                  // MONTH AND YEAR FILTER
-                  if (
-                    newDates.getMonth() == selectedMonth.id &&
-                    newDates.getFullYear() == selectedYear.id &&
-                    data.tipe == "pengeluaran"
-                  ) {
-                    return (
-                      <TableRow key={index}>
-                        <TableCell className=" py-1">{formattedDate}</TableCell>
-                        <TableCell className=" py-1">{data.desc}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className=" py-1">
-                          Rp{commafy(data.amount)}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-                })}
-            </TableBody>
-            <TableFooter className=" bg-white">
-              <TableRow>
-                <TableCell colSpan={2} className=" py-1">
-                  Total
-                </TableCell>
-                <TableCell className=" py-1">
-                  Rp{commafy(penerimaanBulanIni)}
-                </TableCell>
-                <TableCell className=" py-1">
-                  Rp{commafy(pengeluaranBulanIni)}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell colSpan={4} className=" py-1">
-                  Saldo Akhir Bulan Ini
-                </TableCell>
-                <TableCell className=" py-1">
-                  Rp
-                  {commafy(
-                    saldoAwal + penerimaanBulanIni + pengeluaranBulanIni
-                  )}
-                </TableCell>
-              </TableRow>
-
-              {/* {signature &&
-                signature
-                  .reduce((acc, data, index, array) => {
-                    if (index % 2 === 0) {
-                      acc.push(array.slice(index, index + 2));
-                    }
-                    return acc;
-                  }, [] as SignatureType[][])
-                  .map((pair, idx) => (
-                    <TableRow key={idx}>
-                      {pair.map((data) => (
-                        <TableCell
-                          key={data._id}
-                          className="py-2 text-center"
-                          colSpan={2}
-                        >
-                          <div>
-                            <div>{data.role}</div>
-                            <div className="flex items-center justify-center">
-                              <img src={data.signature} alt="Signature" />
-                            </div>
-                            <div>{capitalizeFirstLetter(data.name)}</div>
-                          </div>
-                        </TableCell>
-                      ))}
-                      {pair.length === 1 && (
-                        <TableCell className="py-2 text-center" />
-                      )}{" "}
-                    </TableRow>
-                  ))} */}
-            </TableFooter>
-          </Table>
-          {/* SIGNATURE */}
-          <Table id="tablesignature">
-            <TableBody>
-              {signature &&
-                signature.map((data, index) => {
-                  return (
-                    <TableRow key={index}>
-                      {data.map((data2, index2) => {
-                        return (
-                          <TableCell className=" text-center" key={index2}>
-                            <div className=" flex flex-col items-center justify-center">
-                              <span>{capitalizeFirstLetter(data2.role)}</span>
-                              <div className=" flex items-center justify-center">
-                                <img src={data2.signature} alt="Signature" />
-                              </div>
-                              <span>{capitalizeFirstLetter(data2.name)}</span>
-                            </div>
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </div>
+        <LaporanPerBulanTable
+          transaksi={transaksi}
+          saldoAwal={saldoAwal}
+          penerimaanBulanIni={penerimaanBulanIni}
+          pengeluaranBulanIni={pengeluaranBulanIni}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+          signature={signature}
+        />
       </div>
     </div>
   );
