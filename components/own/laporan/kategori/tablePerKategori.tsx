@@ -33,6 +33,7 @@ import {
 } from "@/lib/utils";
 import CardOwn from "../../dashboard/card/card";
 import { kegiatanIDStore } from "@/app/store/zustand";
+import { generatePDF } from "@/lib/pdfgenerator";
 
 export default function TablePerKategori() {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
@@ -179,12 +180,17 @@ export default function TablePerKategori() {
     });
   };
 
+  const exportPdfHandler = () => {
+    generatePDF("table");
+  };
+
   return (
     <div className=" flex flex-col gap-3 mb-10">
       {/* TABLE AND FILTER */}
       <div className="border rounded-lg">
         <div className="flex items-center justify-between bg-white  p-4">
           <div className="flex items-center gap-2">
+            <Button onClick={exportPdfHandler}>Export To Pdf</Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="flex items-center gap-1" variant="outline">
@@ -247,7 +253,7 @@ export default function TablePerKategori() {
             </DropdownMenu>
           </div>
         </div>
-        <Table className=" bg-white">
+        <Table className=" bg-white" id="table">
           <TableHeader>
             <TableRow>
               <TableHead className=" w-[10%]">Date</TableHead>

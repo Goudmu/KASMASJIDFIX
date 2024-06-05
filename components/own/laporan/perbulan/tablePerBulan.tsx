@@ -21,7 +21,11 @@ import {
   Table,
   TableFooter,
 } from "@/components/ui/table";
-import { KategoriType, TransactionType } from "@/lib/mongodb/models";
+import {
+  BukuKasType,
+  KategoriType,
+  TransactionType,
+} from "@/lib/mongodb/models";
 import React, { useEffect, useState } from "react";
 import {
   capitalizeFirstLetter,
@@ -29,10 +33,14 @@ import {
   getMonthsArray,
   getYearsArray,
   thisMonth,
+  thisMonthFull,
   thisYear,
 } from "@/lib/utils";
-import CardOwn from "../../dashboard/card/card";
 import { kegiatanIDStore } from "@/app/store/zustand";
+// PDF
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import "jspdf-autotable";
 
 export default function TablePerBulan() {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
@@ -43,6 +51,10 @@ export default function TablePerBulan() {
   const [saldoAwal, setSaldoAwal] = useState(0);
   const [penerimaanBulanIni, setpenerimaanBulanIni] = useState(0);
   const [pengeluaranBulanIni, setpengeluaranBulanIni] = useState(0);
+  // TITLE
+  const [title, settitle] = useState(
+    `Laporan Keuangan Per Bulan ${thisMonthFull().name} Masjid Agung Gamping`
+  );
   // GET KEGIATAN ID
   const kegiatanId = kegiatanIDStore((state: any) => state.kegiatanID);
 
@@ -64,14 +76,18 @@ export default function TablePerBulan() {
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
     setTransaksi(transaksi);
+    saldoAwalHandler({
+      month: selectedMonth.id,
+      year: selectedYear.id,
+      transaksi: transaksi,
+    });
   };
 
   useEffect(() => {
     getTransaksiData();
-    saldoAwalHandler({ month: selectedMonth.id, year: selectedYear.id });
-  }, [transaksi]);
+  }, []);
 
-  const saldoAwalHandler = ({ month, year }: any) => {
+  const saldoAwalHandler = ({ month, year, transaksi }: any) => {
     let saldoAwalBaru = 0;
     let thisMonthRevenue = 0;
     let thisMonthExpenses = 0;
@@ -125,7 +141,11 @@ export default function TablePerBulan() {
     setSelectedMonth(monthFilter.filter((data) => data.id == id)[0]);
 
     // ATUR SALDO AWAL
-    saldoAwalHandler({ month: id, year: selectedYear.id });
+    saldoAwalHandler({
+      month: id,
+      year: selectedYear.id,
+      transaksi: transaksi,
+    });
   };
   const yearFilterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
@@ -133,15 +153,61 @@ export default function TablePerBulan() {
     setSelectedYear(yearFilter.filter((data) => data.id == id)[0]);
 
     // ATUR SALDO AWAL
-    saldoAwalHandler({ month: selectedMonth.id, year: id });
+    saldoAwalHandler({
+      month: selectedMonth.id,
+      year: id,
+      transaksi: transaksi,
+    });
+  };
+
+  const exportPdfHandler = () => {
+    const doc = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    autoTable(doc, {
+      // styles: { fillColor: [255, 255, 255] },
+      html: "#table",
+      theme: "grid",
+      margin: { top: 30, left: 10, right: 10, bottom: 30 },
+      headStyles: {
+        fillColor: [255, 255, 255], // Black color for header background
+        textColor: [30, 30, 30], // White color for header text
+        lineWidth: 0.5, // Add border for header
+        lineColor: [0, 0, 0], // Black color for header border
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255], // White color for body background
+        textColor: [30, 30, 30], // Black color for body text
+        lineWidth: 0.5, // Add border for body
+        lineColor: [0, 0, 0], // Black color for body border
+      },
+      footStyles: {
+        fillColor: [255, 255, 255], // White color for footer background
+        textColor: [30, 30, 30], // Black color for footer text
+        lineWidth: 0.5, // Add border for footer
+        lineColor: [0, 0, 0], // Black color for footer border
+      },
+      willDrawPage: function (data) {
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(40);
+        doc.text(title, 10, 10);
+      },
+    });
+
+    doc.save("table.pdf");
   };
 
   return (
     <div className=" flex flex-col gap-3 mb-10">
       {/* TABLE AND FILTER */}
-      <div className="border rounded-lg">
+      <div className="flex flex-col gap-5">
         <div className="flex items-center justify-between bg-white  p-4">
           <div className="flex items-center gap-2">
+            <Button onClick={exportPdfHandler}>Export To Pdf</Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="flex items-center gap-1" variant="outline">
@@ -204,107 +270,110 @@ export default function TablePerBulan() {
             </DropdownMenu>
           </div>
         </div>
-        <Table className=" bg-white">
-          <TableHeader>
-            <TableRow>
-              <TableHead className=" w-[10%]">Date</TableHead>
-              <TableHead className=" w-[50%]">Description</TableHead>
-              <TableHead className=" w-[10%]">Penerimaan</TableHead>
-              <TableHead className=" w-[10%]">Pengeluaran</TableHead>
-              <TableHead className=" w-[10%]">Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell colSpan={4} className=" py-1">
-                Saldo Awal Bulan Ini
-              </TableCell>
-              <TableCell className=" py-1">Rp{commafy(saldoAwal)}</TableCell>
-            </TableRow>
-            {/* PENERIMAAN */}
-            <TableRow>
-              <TableCell colSpan={5} className=" py-1">
-                Penerimaan
-              </TableCell>
-            </TableRow>
-            {transaksi &&
-              transaksi.map((data, index) => {
-                // CHANGE DATE TO LOCAL DATE
-                const newDates = new Date(data.date);
-                const formattedDate = newDates.toLocaleDateString("en-GB");
+        <div className="bg-white">
+          <Table className=" border rounded-md" id="table">
+            <TableHeader>
+              <TableRow>
+                <TableHead className=" w-[10%]">Date</TableHead>
+                <TableHead className=" w-[50%]">Description</TableHead>
+                <TableHead className=" w-[10%]">Penerimaan</TableHead>
+                <TableHead className=" w-[10%]">Pengeluaran</TableHead>
+                <TableHead className=" w-[10%]">Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={4} className=" py-1">
+                  Saldo Awal Bulan Ini
+                </TableCell>
+                <TableCell className=" py-1">Rp{commafy(saldoAwal)}</TableCell>
+              </TableRow>
+              {/* PENERIMAAN */}
+              <TableRow>
+                <TableCell colSpan={5} className=" py-1">
+                  Penerimaan
+                </TableCell>
+              </TableRow>
+              {transaksi &&
+                transaksi.map((data, index) => {
+                  // CHANGE DATE TO LOCAL DATE
+                  const newDates = new Date(data.date);
+                  const formattedDate = newDates.toLocaleDateString("en-GB");
 
-                // MONTH AND YEAR FILTER
-                if (
-                  newDates.getMonth() == selectedMonth.id &&
-                  newDates.getFullYear() == selectedYear.id &&
-                  data.tipe == "penerimaan"
-                ) {
-                  return (
-                    <TableRow key={index}>
-                      <TableCell className=" py-1">{formattedDate}</TableCell>
-                      <TableCell className=" py-1">{data.desc}</TableCell>
-                      <TableCell className=" py-1">
-                        Rp{commafy(data.amount)}
-                      </TableCell>
-                    </TableRow>
-                  );
-                }
-              })}
-            {/* PENGELUARAN */}
-            <TableRow>
-              <TableCell colSpan={4} className=" py-1">
-                Pengeluaran
-              </TableCell>
-            </TableRow>
-            {transaksi &&
-              transaksi.map((data, index) => {
-                // CHANGE DATE TO LOCAL DATE
-                const newDates = new Date(data.date);
-                const formattedDate = newDates.toLocaleDateString("en-GB");
+                  // MONTH AND YEAR FILTER
+                  if (
+                    newDates.getMonth() == selectedMonth.id &&
+                    newDates.getFullYear() == selectedYear.id &&
+                    data.tipe == "penerimaan"
+                  ) {
+                    return (
+                      <TableRow key={index}>
+                        <TableCell className=" py-1">{formattedDate}</TableCell>
+                        <TableCell className=" py-1">{data.desc}</TableCell>
+                        <TableCell className=" py-1">
+                          Rp{commafy(data.amount)}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }
+                })}
+              {/* PENGELUARAN */}
+              <TableRow>
+                <TableCell colSpan={5} className=" py-1">
+                  Pengeluaran
+                </TableCell>
+              </TableRow>
+              {transaksi &&
+                transaksi.map((data, index) => {
+                  // CHANGE DATE TO LOCAL DATE
+                  const newDates = new Date(data.date);
+                  const formattedDate = newDates.toLocaleDateString("en-GB");
 
-                // MONTH AND YEAR FILTER
-                if (
-                  newDates.getMonth() == selectedMonth.id &&
-                  newDates.getFullYear() == selectedYear.id &&
-                  data.tipe == "pengeluaran"
-                ) {
-                  return (
-                    <TableRow key={index}>
-                      <TableCell className=" py-1">{formattedDate}</TableCell>
-                      <TableCell className=" py-1" colSpan={2}>
-                        {data.desc}
-                      </TableCell>
-                      <TableCell className=" py-1">
-                        Rp{commafy(data.amount)}
-                      </TableCell>
-                    </TableRow>
-                  );
-                }
-              })}
-          </TableBody>
-          <TableFooter className=" bg-white">
-            <TableRow>
-              <TableCell colSpan={2} className=" py-1">
-                Total
-              </TableCell>
-              <TableCell className=" py-1">
-                Rp{commafy(penerimaanBulanIni)}
-              </TableCell>
-              <TableCell className=" py-1">
-                Rp{commafy(pengeluaranBulanIni)}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={4} className=" py-1">
-                Saldo Akhir Bulan Ini
-              </TableCell>
-              <TableCell className=" py-1">
-                Rp
-                {commafy(saldoAwal + penerimaanBulanIni + pengeluaranBulanIni)}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+                  // MONTH AND YEAR FILTER
+                  if (
+                    newDates.getMonth() == selectedMonth.id &&
+                    newDates.getFullYear() == selectedYear.id &&
+                    data.tipe == "pengeluaran"
+                  ) {
+                    return (
+                      <TableRow key={index}>
+                        <TableCell className=" py-1">{formattedDate}</TableCell>
+                        <TableCell className=" py-1">{data.desc}</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className=" py-1">
+                          Rp{commafy(data.amount)}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }
+                })}
+            </TableBody>
+            <TableFooter className=" bg-white">
+              <TableRow>
+                <TableCell colSpan={2} className=" py-1">
+                  Total
+                </TableCell>
+                <TableCell className=" py-1">
+                  Rp{commafy(penerimaanBulanIni)}
+                </TableCell>
+                <TableCell className=" py-1">
+                  Rp{commafy(pengeluaranBulanIni)}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={4} className=" py-1">
+                  Saldo Akhir Bulan Ini
+                </TableCell>
+                <TableCell className=" py-1">
+                  Rp
+                  {commafy(
+                    saldoAwal + penerimaanBulanIni + pengeluaranBulanIni
+                  )}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </div>
       </div>
     </div>
   );

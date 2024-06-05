@@ -47,9 +47,37 @@ export function getMonthsArray() {
   });
 }
 
+export function getMonthsArrayFull() {
+  const months = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+
+  return months.map((month, index) => {
+    return {
+      id: index,
+      name: month,
+    };
+  });
+}
+
 export function thisMonth() {
   const currentMonthIndex = new Date().getMonth(); // getMonth() returns 0-11 for Jan-Dec
   return getMonthsArray().filter((data) => data.id == currentMonthIndex)[0];
+}
+export function thisMonthFull() {
+  const currentMonthIndex = new Date().getMonth(); // getMonth() returns 0-11 for Jan-Dec
+  return getMonthsArrayFull().filter((data) => data.id == currentMonthIndex)[0];
 }
 
 export function getYearsArray(startYear = 2020) {
