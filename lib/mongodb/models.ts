@@ -174,6 +174,24 @@ export type TransactionType = {
   userId: string;
 };
 
+const SignatureSchema = new Schema(
+  {
+    name: String,
+    role: String,
+    signature: String,
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export type SignatureType = {
+  _id: string;
+  name: string;
+  role: string;
+  signature: string;
+};
+
 const cobaSchema = new Schema({
   name: {
     type: String,
@@ -194,6 +212,8 @@ const authsSchema = new Schema({
   },
 });
 
+export const Signature =
+  mongoose.models.Signature || mongoose.model("Signature", SignatureSchema);
 export const User2 =
   mongoose.models.User2 || mongoose.model("User2", userSchema2);
 export const Kegiatan2 =

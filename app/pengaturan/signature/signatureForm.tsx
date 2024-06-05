@@ -1,0 +1,54 @@
+"use client";
+import InputSignature from "@/components/own/signature/form/inputSignature";
+import TableSignature from "@/components/own/signature/table/tableSignature";
+import { useEffect, useRef, useState } from "react";
+
+const SignatureForm = () => {
+  const [signatureSetting, setsignatureSetting] = useState();
+  const [trigger, setTrigger] = useState(true);
+  const ref = useRef();
+
+  const getData = async () => {
+    const res = await fetch(`/api/signature`, {
+      cache: "no-store",
+    })
+      .then((res) => res.json())
+      .then(({ signature }) => {
+        setsignatureSetting(signature);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, [trigger]);
+
+  if (signatureSetting == null || signatureSetting == undefined) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className=" flex flex-col gap-5">
+      <div>
+        <InputSignature
+          tipe={"input"}
+          setTrigger={setTrigger}
+          trigger={trigger}
+        />
+      </div>
+      <div>
+        <TableSignature
+          signature={signatureSetting}
+          setTrigger={setTrigger}
+          trigger={trigger}
+          // ref={ref}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default SignatureForm;
