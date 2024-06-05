@@ -1,13 +1,11 @@
 "use client";
 import InputSignature from "@/components/own/signature/form/inputSignature";
 import TableSignature from "@/components/own/signature/table/tableSignature";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const SignatureForm = () => {
   const [signatureSetting, setsignatureSetting] = useState();
   const [trigger, setTrigger] = useState(true);
-  const ref = useRef();
-
   const getData = async () => {
     const res = await fetch(`/api/signature`, {
       cache: "no-store",
@@ -44,7 +42,6 @@ const SignatureForm = () => {
           signature={signatureSetting}
           setTrigger={setTrigger}
           trigger={trigger}
-          // ref={ref}
         />
       </div>
     </div>
