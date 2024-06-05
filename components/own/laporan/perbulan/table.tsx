@@ -20,12 +20,17 @@ const LaporanPerBulanTable = ({
   selectedMonth,
   selectedYear,
   signature,
+  title,
 }: any) => {
   useEffect(() => {
     addPrintShortcut();
   }, []);
   return (
-    <main className="bg-white" id="mainpdf">
+    <main className=" bg-white mt-5 flex flex-col gap-5" id="mainpdf">
+      <div className=" flex flex-col items-center justify-center">
+        <h1>Masjid Agung Gamping</h1>
+        <h2>{title}</h2>
+      </div>
       {/* TABLE */}
       <Table className=" border rounded-md" id="table">
         <TableHeader>

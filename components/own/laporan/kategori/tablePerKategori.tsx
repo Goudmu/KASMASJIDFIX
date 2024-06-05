@@ -21,6 +21,7 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import {
+  BukuKasType,
   KategoriType,
   SignatureType,
   TransactionType,
@@ -50,6 +51,9 @@ export default function TablePerKategori() {
   const [pengeluaranBulanIni, setpengeluaranBulanIni] = useState(0);
   // GET KEGIATAN ID
   const kegiatanId = kegiatanIDStore((state: any) => state.kegiatanID);
+  // TITLE
+  const [kegiatan, setKegiatan] = useState<BukuKasType>();
+  const [title, settitle] = useState("");
 
   const getTransaksiData = async () => {
     const res = await fetch(`/api/transaksi/perKegiatan?id=${kegiatanId}`, {
@@ -99,6 +103,10 @@ export default function TablePerKategori() {
     });
     setKategori(allkategori);
     setTransaksi(transaksi);
+    setKegiatan(kegiatan);
+    settitle(
+      `Laporan Keuangan Kegiatan ${kegiatan.name} Periode ${selectedMonth.name} tahun ${selectedYear.id}`
+    );
     saldoAwalHandler({
       month: selectedMonth.id,
       year: selectedYear.id,
@@ -175,7 +183,8 @@ export default function TablePerKategori() {
   const monthFilterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
     const id = parseInt(target.id);
-    setSelectedMonth(monthFilter.filter((data) => data.id == id)[0]);
+    const newMonth = monthFilter.filter((data) => data.id == id)[0];
+    setSelectedMonth(newMonth);
 
     // ATUR SALDO AWAL
     saldoAwalHandler({
@@ -183,11 +192,15 @@ export default function TablePerKategori() {
       year: selectedYear.id,
       transaksi: transaksi,
     });
+    settitle(
+      `Laporan Keuangan Kegiatan ${kegiatan?.name} Periode ${newMonth.name} tahun ${selectedYear.id}`
+    );
   };
   const yearFilterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
     const id = parseInt(target.id);
-    setSelectedYear(yearFilter.filter((data) => data.id == id)[0]);
+    const newYear = yearFilter.filter((data) => data.id == id)[0];
+    setSelectedYear(newYear);
 
     // ATUR SALDO AWAL
     saldoAwalHandler({
@@ -195,6 +208,9 @@ export default function TablePerKategori() {
       year: id,
       transaksi: transaksi,
     });
+    settitle(
+      `Laporan Keuangan Kegiatan ${kegiatan?.name} Periode ${selectedMonth.name} tahun ${newYear.name}`
+    );
   };
 
   const exportHandler = (e: any) => {
@@ -215,6 +231,10 @@ export default function TablePerKategori() {
       location.reload();
     }, 100); // Adjust the delay as needed
   };
+
+  if (transaksi == undefined || signature == undefined) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className=" flex flex-col gap-3 mb-10">
@@ -287,9 +307,13 @@ export default function TablePerKategori() {
             </DropdownMenu>
           </div>
         </div>
-        <main id="mainpdf">
+        <main id="mainpdf" className=" bg-white mt-5 flex flex-col gap-5">
+          <div className=" flex flex-col items-center justify-center">
+            <h1>Masjid Agung Gamping</h1>
+            <h2>{title}</h2>
+          </div>
           {/* TRANSAKSI PER KATEGORI */}
-          <Table className=" bg-white" id="table">
+          <Table className=" border rounded-md bg-white" id="table">
             <TableHeader>
               <TableRow>
                 <TableHead className=" w-[10%]">Tanggal</TableHead>

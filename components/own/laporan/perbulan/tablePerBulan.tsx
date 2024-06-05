@@ -11,6 +11,7 @@ import {
   DropdownMenu,
 } from "@/components/ui/dropdown-menu";
 import {
+  BukuKasType,
   KategoriType,
   SignatureType,
   TransactionType,
@@ -36,12 +37,11 @@ export default function TablePerBulan() {
   const [saldoAwal, setSaldoAwal] = useState(0);
   const [penerimaanBulanIni, setpenerimaanBulanIni] = useState(0);
   const [pengeluaranBulanIni, setpengeluaranBulanIni] = useState(0);
-  // TITLE
-  const [title, settitle] = useState(
-    `Laporan Keuangan Per Bulan ${thisMonthFull().name} Masjid Agung Gamping`
-  );
   // GET KEGIATAN ID
   const kegiatanId = kegiatanIDStore((state: any) => state.kegiatanID);
+  // TITLE
+  const [kegiatan, setKegiatan] = useState<BukuKasType>();
+  const [title, settitle] = useState("");
 
   const getTransaksiData = async () => {
     const res = await fetch(`/api/transaksi/perKegiatan?id=${kegiatanId}`, {
@@ -61,6 +61,10 @@ export default function TablePerBulan() {
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
     setTransaksi(transaksi);
+    setKegiatan(kegiatan);
+    settitle(
+      `Laporan Keuangan Kegiatan ${kegiatan.name} Periode ${selectedMonth.name} tahun ${selectedYear.id}`
+    );
     saldoAwalHandler({
       month: selectedMonth.id,
       year: selectedYear.id,
@@ -136,7 +140,8 @@ export default function TablePerBulan() {
   const monthFilterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
     const id = parseInt(target.id);
-    setSelectedMonth(monthFilter.filter((data) => data.id == id)[0]);
+    const newMonth = monthFilter.filter((data) => data.id == id)[0];
+    setSelectedMonth(newMonth);
 
     // ATUR SALDO AWAL
     saldoAwalHandler({
@@ -144,11 +149,15 @@ export default function TablePerBulan() {
       year: selectedYear.id,
       transaksi: transaksi,
     });
+    settitle(
+      `Laporan Keuangan Kegiatan ${kegiatan?.name} Periode ${newMonth.name} tahun ${selectedYear.id}`
+    );
   };
   const yearFilterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
     const id = parseInt(target.id);
-    setSelectedYear(yearFilter.filter((data) => data.id == id)[0]);
+    const newYear = yearFilter.filter((data) => data.id == id)[0];
+    setSelectedYear(newYear);
 
     // ATUR SALDO AWAL
     saldoAwalHandler({
@@ -156,6 +165,9 @@ export default function TablePerBulan() {
       year: id,
       transaksi: transaksi,
     });
+    settitle(
+      `Laporan Keuangan Kegiatan ${kegiatan?.name} Periode ${selectedMonth.name} tahun ${newYear.name}`
+    );
   };
   const exportHandler = (e: any) => {
     e.preventDefault();
@@ -259,6 +271,7 @@ export default function TablePerBulan() {
           selectedMonth={selectedMonth}
           selectedYear={selectedYear}
           signature={signature}
+          title={title}
         />
       </div>
     </div>
