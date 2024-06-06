@@ -53,20 +53,6 @@ export default function NavbarComponent() {
           >
             Report
           </Link>
-          {/* <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Mosque Activity
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Lecture
-          </Link> */}
           {session && (
             <Link
               href="/dashboard"
@@ -88,44 +74,27 @@ export default function NavbarComponent() {
             <div className="grid gap-4 p-4">
               <Link
                 href="/"
-                className="flex items-center gap-2 text-lg font-medium"
-                prefetch={false}
+                className="text-sm font-medium hover:underline underline-offset-4"
+                prefetch={true}
               >
-                <ChurchIcon className="h-6 w-6" />
                 Home
               </Link>
               <Link
                 href="#"
-                className="flex items-center gap-2 text-lg font-medium"
+                className="text-sm font-medium hover:underline underline-offset-4"
                 prefetch={false}
               >
-                <CheckIcon className="h-6 w-6" />
                 Report
               </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-medium"
-                prefetch={false}
-              >
-                <CalendarIcon className="h-6 w-6" />
-                Mosque Activity
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-medium"
-                prefetch={false}
-              >
-                <BookIcon className="h-6 w-6" />
-                Lecture
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-medium"
-                prefetch={false}
-              >
-                <BookIcon className="h-6 w-6" />
-                Lecture
-              </Link>
+              {session && (
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium hover:underline underline-offset-4"
+                  prefetch={false}
+                >
+                  Dashboard
+                </Link>
+              )}
             </div>
           </SheetContent>
         </Sheet>
@@ -194,37 +163,46 @@ export default function NavbarComponent() {
           </SheetTrigger>
           <SheetContent side="left">
             <div className="grid gap-4 p-4">
+              <a
+                href="/"
+                className="text-sm font-medium hover:underline underline-offset-4"
+              >
+                Home
+              </a>
               <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-medium"
+                href="/dashboard"
+                className="text-sm font-medium hover:underline underline-offset-4"
                 prefetch={false}
               >
-                <ChurchIcon className="h-6 w-6" />
-                Home
+                Transaksi
               </Link>
               <Link
                 href="/laporan"
-                className="flex items-center gap-2 text-lg font-medium"
+                className="text-sm font-medium hover:underline underline-offset-4"
                 prefetch={false}
               >
-                <CheckIcon className="h-6 w-6" />
-                Report
+                Laporan
+              </Link>
+              <Link
+                href="/pengaturan"
+                className="text-sm font-medium hover:underline underline-offset-4"
+                prefetch={false}
+              >
+                Pengaturan
               </Link>
               <Link
                 href="#"
-                className="flex items-center gap-2 text-lg font-medium"
+                className="text-sm font-medium hover:underline underline-offset-4"
                 prefetch={false}
               >
-                <CalendarIcon className="h-6 w-6" />
-                Mosque Activity
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-2 text-lg font-medium"
-                prefetch={false}
-              >
-                <BookIcon className="h-6 w-6" />
-                Lecture
+                <button
+                  onClick={async () => {
+                    console.log("asd123");
+                    await signOut();
+                  }}
+                >
+                  Log Out
+                </button>
               </Link>
             </div>
           </SheetContent>
