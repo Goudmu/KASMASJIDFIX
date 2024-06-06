@@ -37,6 +37,7 @@ import {
   thisYear,
 } from "@/lib/utils";
 import { kegiatanIDStore } from "@/app/store/zustand";
+import SkeletonTableComponent from "../../skeleton/skeletonTable";
 
 export default function TablePerKategori() {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
@@ -232,10 +233,87 @@ export default function TablePerKategori() {
     }, 100); // Adjust the delay as needed
   };
 
-  if (transaksi == undefined || signature == undefined) {
-    return <div>Loading...</div>;
+  if (transaksi.length == 0 || signature.length == 0) {
+    return (
+      <div className=" flex flex-col gap-5">
+        <div className="flex items-center justify-between bg-white  p-4">
+          <div className="flex items-center gap-2">
+            <Button onClick={exportHandler} type="submit">
+              Export PDF
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="flex items-center gap-1" variant="outline">
+                  <CalendarIcon className="h-4 w-4" />
+                  <span>Filter by month</span>
+                  <ChevronDownIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[200px]">
+                <DropdownMenuLabel>Select month</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup value={selectedMonth.id.toString()}>
+                  {monthFilter &&
+                    monthFilter.map((data) => {
+                      // CHANGE DATA.ID TO STRING FOR DropdownMenuRadioItem value
+                      const valueString = data.id.toString();
+                      return (
+                        <DropdownMenuRadioItem
+                          value={valueString}
+                          key={data.id}
+                          id={valueString}
+                          onClick={monthFilterHandler}
+                        >
+                          {data.name}
+                        </DropdownMenuRadioItem>
+                      );
+                    })}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="flex items-center gap-1" variant="outline">
+                  <CalendarIcon className="h-4 w-4" />
+                  <span>Filter by year</span>
+                  <ChevronDownIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[200px]">
+                <DropdownMenuLabel>Select year</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup value={selectedYear.id.toString()}>
+                  {yearFilter &&
+                    yearFilter.map((data) => {
+                      // CHANGE DATA.ID TO STRING FOR DropdownMenuRadioItem value
+                      const valueString = data.id.toString();
+                      return (
+                        <DropdownMenuRadioItem
+                          id={valueString}
+                          value={valueString}
+                          key={data.id}
+                          onClick={yearFilterHandler}
+                        >
+                          {data.name}
+                        </DropdownMenuRadioItem>
+                      );
+                    })}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+        <SkeletonTableComponent
+          count={[
+            { cellWidth: "w-[10%]" },
+            { cellWidth: "w-[50%]" },
+            { cellWidth: "w-[10%]" },
+            { cellWidth: "w-[10%]" },
+          ]}
+        />
+      </div>
+    );
   }
-
   return (
     <div className=" flex flex-col gap-3 mb-10">
       {/* TABLE AND FILTER */}
