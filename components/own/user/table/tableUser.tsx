@@ -10,12 +10,13 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { UserType } from "@/lib/mongodb/models";
-import { roleUserUtils } from "@/lib/utils";
+import { capitalizeFirstLetter, roleUserUtils } from "@/lib/utils";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import AlertDelete from "../../alertDelete";
 import { toast } from "react-toastify";
 import SkeletonTableComponent from "../../skeleton/skeletonTable";
+import InputUser from "../form/inputUser";
 
 const TableUser = ({ trigger, settrigger }: any) => {
   const [userData, setUserData] = useState<UserType[] | undefined>([]);
@@ -73,7 +74,8 @@ const TableUser = ({ trigger, settrigger }: any) => {
             <TableHead>Username</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="w-[5%]">Edit</TableHead>
+            <TableHead className="w-[5%]">Delete</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -88,8 +90,9 @@ const TableUser = ({ trigger, settrigger }: any) => {
                     </TableCell>
                     <TableCell className=" py-1">{data.email}</TableCell>
                     <TableCell className=" py-1">
-                      {roleUserUtils(data.role ?? 0)}
+                      {capitalizeFirstLetter(roleUserUtils(data.role))}
                     </TableCell>
+                    <TableCell></TableCell>
                     <TableCell className="text-right py-1">
                       <Button variant="ghost" size="icon">
                         <TrashIcon className="h-4 w-4" />
@@ -104,13 +107,17 @@ const TableUser = ({ trigger, settrigger }: any) => {
                   <TableCell className=" py-1">{data.username}</TableCell>
                   <TableCell className=" py-1">{data.email}</TableCell>
                   <TableCell className=" py-1">
-                    {roleUserUtils(data.role)}
+                    {capitalizeFirstLetter(roleUserUtils(data.role))}
                   </TableCell>
-                  <TableCell className="text-right py-1 flex justify-end">
-                    <Button variant="ghost" size="icon">
-                      <PencilIcon className="h-4 w-4" />
-                      <span className="sr-only">Edit</span>
-                    </Button>
+                  <TableCell>
+                    <InputUser
+                      data={data}
+                      tipe={"edit"}
+                      trigger={trigger}
+                      settrigger={settrigger}
+                    />
+                  </TableCell>
+                  <TableCell>
                     <AlertDelete deleteFuntion={deleteHandler} id={data._id} />
                   </TableCell>
                 </TableRow>

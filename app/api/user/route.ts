@@ -33,7 +33,7 @@ export const POST = async (req: NextRequest) => {
 export const PUT = async (req: NextRequest) => {
   try {
     await connectToDB();
-    const { username, email, password, role, _id } = await req.json();
+    const { username, email, password, role, _id, isActive } = await req.json();
     const createUser = await User2.findByIdAndUpdate(
       { _id },
       {
@@ -41,6 +41,7 @@ export const PUT = async (req: NextRequest) => {
         email,
         password,
         role,
+        isActive,
       }
     );
     return NextResponse.json({ message: "Akun Berhasil Ditambahkan" });
