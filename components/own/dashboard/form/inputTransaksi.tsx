@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import ComponentTransaction from "./transaksiForm";
+import { PencilIcon } from "@/lib/icon/icon";
 
 const InputTransaksi = ({
   kegiatanId,
@@ -32,8 +33,9 @@ const InputTransaksi = ({
       <AlertDialog>
         <AlertDialogTrigger asChild>
           {tipe == "edit" ? (
-            <Button variant="secondary" size="xs">
-              {capitalizeFirstLetter(tipe)} Kas
+            <Button variant="link" size="xs">
+              <PencilIcon className="h-4 w-4" />
+              <span className="sr-only">Edit</span>
             </Button>
           ) : (
             <Button>Input {capitalizeFirstLetter(tipe)} Kas</Button>

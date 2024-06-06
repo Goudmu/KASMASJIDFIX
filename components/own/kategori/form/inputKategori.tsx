@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import ComponentKategori from "./kategoriForm";
+import { PencilIcon } from "@/lib/icon/icon";
 
 const InputKategori = ({ tipe, dataKategori, trigger, setTrigger }: any) => {
   return (
@@ -24,9 +25,10 @@ const InputKategori = ({ tipe, dataKategori, trigger, setTrigger }: any) => {
       <AlertDialog>
         <AlertDialogTrigger asChild>
           {tipe == "edit" ? (
-            <span className=" cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm w-full">
-              {capitalizeFirstLetter(tipe)} Kategori
-            </span>
+            <Button variant="link" size="xs">
+              <PencilIcon className="h-4 w-4" />
+              <span className="sr-only">Edit</span>
+            </Button>
           ) : (
             <Button>Input {capitalizeFirstLetter(tipe)} Kategori</Button>
           )}

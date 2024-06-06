@@ -1,6 +1,7 @@
 "use client";
 import InputBukuKas from "@/components/own/bukukas/form/inputBukuKas";
 import TableBukukas from "@/components/own/bukukas/table/tableBukukas";
+import SkeletonTableComponent from "@/components/own/skeleton/skeletonTable";
 import { useEffect, useState } from "react";
 
 const BukuKasForm = () => {
@@ -26,7 +27,7 @@ const BukuKasForm = () => {
   }, [trigger]);
 
   if (BukuKasSetting == null || BukuKasSetting == undefined) {
-    return <div>Loading...</div>;
+    return <SkeletonTableComponent count={5} />;
   }
 
   return (

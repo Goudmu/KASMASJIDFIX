@@ -22,6 +22,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import InputKategori from "../form/inputKategori";
+import AlertDelete from "../../alertDelete";
 
 export default function TableKategori({
   kategori,
@@ -56,8 +57,8 @@ export default function TableKategori({
   };
 
   return (
-    <div className="border rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-4">
+    <div className="border rounded-lg overflow-hidden bg-white">
+      <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-2">
           <Input
             className="max-w-[200px] sm:max-w-[300px]"
@@ -75,7 +76,8 @@ export default function TableKategori({
             <TableHead>Name</TableHead>
             <TableHead>Tipe</TableHead>
             <TableHead>Nama Kegiatan</TableHead>
-            <TableHead>Edit / Delete</TableHead>
+            <TableHead className=" w-[5%] text-center">Edit</TableHead>
+            <TableHead className=" w-[5%] text-center">Delete</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -95,32 +97,19 @@ export default function TableKategori({
                     <TableCell className=" py-2">
                       {capitalizeFirstLetter(data.kegiatanName)}
                     </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <div className=" w-full cursor-pointer">
-                            <InputKategori
-                              tipe={"edit"}
-                              dataKategori={data}
-                              trigger={trigger}
-                              setTrigger={setTrigger}
-                            />
-                          </div>
-                          <DropdownMenuItem
-                            className=" cursor-pointer"
-                            onClick={deleteKategoriHandler}
-                            id={data._id}
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                    <TableCell className=" py-1">
+                      <InputKategori
+                        tipe={"edit"}
+                        dataKategori={data}
+                        trigger={trigger}
+                        setTrigger={setTrigger}
+                      />
+                    </TableCell>
+                    <TableCell className=" py-1">
+                      <AlertDelete
+                        deleteFuntion={deleteKategoriHandler}
+                        id={data._id}
+                      />
                     </TableCell>
                   </TableRow>
                 );

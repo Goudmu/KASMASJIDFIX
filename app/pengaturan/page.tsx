@@ -4,12 +4,18 @@ import TableUser from "@/components/own/user/table/tableUser";
 import CardUser from "@/components/own/user/card/cardUser";
 import UserPageProvider from "@/components/own/user/provider/userPageProvider";
 import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
 
 export default function UserPage() {
   const [trigger, settrigger] = useState(true);
   return (
     <UserPageProvider>
-      <div className="container mx-auto py-8 px-4 md:px-6">
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-medium">Akun</h3>
+          <p className="text-sm text-muted-foreground">Kelola Akunmu Disini</p>
+        </div>
+        <Separator />
         <div className="grid gap-8">
           <CardUser trigger={trigger} settrigger={settrigger} />
           <div className="flex flex-col gap-2">

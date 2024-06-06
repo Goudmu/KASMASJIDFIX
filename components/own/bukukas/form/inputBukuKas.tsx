@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import ComponentBukuKas from "./bukuKasForm";
+import { PencilIcon } from "@/lib/icon/icon";
 
 const InputBukuKas = ({
   tipe,
@@ -30,9 +31,10 @@ const InputBukuKas = ({
       <AlertDialog>
         <AlertDialogTrigger asChild>
           {tipe == "edit" ? (
-            <span className=" cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm w-full">
-              {capitalizeFirstLetter(tipe)} Buku Kas
-            </span>
+            <Button variant="link" size="xs">
+              <PencilIcon className="h-4 w-4" />
+              <span className="sr-only">Edit</span>
+            </Button>
           ) : (
             <Button>Input {capitalizeFirstLetter(tipe)} Buku Kas</Button>
           )}
