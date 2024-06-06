@@ -13,6 +13,7 @@ import {
   thisMonth,
   thisYear,
 } from "@/lib/utils";
+import Link from "next/link";
 import React from "react";
 
 const CardReport = ({
@@ -21,6 +22,7 @@ const CardReport = ({
   totalPengeluaran = 0,
   saldoAkhir = 0,
   title = "",
+  _id = "",
 }: any) => {
   return (
     <Card>
@@ -64,7 +66,7 @@ const CardReport = ({
       </CardContent>
       <CardFooter>
         <Button variant="outline" size="sm">
-          View Details
+          <Link href={`/public/laporan/perbulan?id=${_id}`}>View Details</Link>
         </Button>
       </CardFooter>
     </Card>

@@ -36,6 +36,7 @@ const PublicReportPage = () => {
                   data.saldoAwal + data.totalPenerimaan - data.totalPenngeluaran
                 }
                 title={data.name}
+                _id={data._id}
               />
             </div>
           );
