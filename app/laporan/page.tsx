@@ -1,5 +1,6 @@
 import Link from "next/link";
 import TablePerBulan from "@/components/own/laporan/perbulan/tablePerBulan";
+import { MosqueIcon } from "@/lib/icon/icon";
 
 export default function LaporanPage() {
   return (
@@ -12,7 +13,7 @@ export default function LaporanPage() {
               className="flex items-center gap-2 font-semibold"
               prefetch={false}
             >
-              <ChurchIcon className="h-6 w-6" />
+              <MosqueIcon />
               <span className="">Masjid Agung Gamping</span>
             </Link>
           </div>

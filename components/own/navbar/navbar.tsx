@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { MosqueIcon } from "@/lib/icon/icon";
 
 export default function NavbarComponent() {
   const [isloading, setisloading] = useState(true);
@@ -21,7 +22,7 @@ export default function NavbarComponent() {
     return (
       <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between h-[5vh]">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <ChurchIcon className="h-6 w-6" />
+          <MosqueIcon color={"white"} />
           <span className="text-xl font-bold">Masjid Agung Gamping</span>
         </Link>
         <nav className="hidden lg:flex items-center gap-6">
@@ -34,7 +35,7 @@ export default function NavbarComponent() {
     return (
       <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between h-[5vh]">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <ChurchIcon className="h-6 w-6" />
+          <MosqueIcon color={"white"} />
           <span className="text-xl font-bold">Masjid Agung Gamping</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
@@ -138,7 +139,7 @@ export default function NavbarComponent() {
           className="flex items-center gap-2"
           prefetch={false}
         >
-          <ChurchIcon className="h-6 w-6" />
+          <MosqueIcon color={"white"} />
           <span className="text-xl font-bold">Masjid Agung Gamping</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
@@ -155,20 +156,6 @@ export default function NavbarComponent() {
           >
             Transaksi
           </Link>
-          {/* <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Program kerja
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Pengajian
-          </Link> */}
           <Link
             href="/laporan"
             className="text-sm font-medium hover:underline underline-offset-4"
