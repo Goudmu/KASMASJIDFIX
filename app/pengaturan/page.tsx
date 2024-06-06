@@ -20,10 +20,10 @@ export default function UserPage() {
           <CardUser trigger={trigger} settrigger={settrigger} />
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">User Management</h2>
+              <h2 className="text-xl font-semibold">Manajemen Akun</h2>
               <Button variant="outline">
                 <PlusIcon className="mr-2 h-4 w-4" />
-                Add User
+                Input User
               </Button>
             </div>
             <TableUser trigger={trigger} settrigger={settrigger} />

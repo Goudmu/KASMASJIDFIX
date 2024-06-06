@@ -27,7 +27,24 @@ const BukuKasForm = () => {
   }, [trigger]);
 
   if (BukuKasSetting == null || BukuKasSetting == undefined) {
-    return <SkeletonTableComponent count={5} />;
+    return (
+      <div className=" flex flex-col gap-5">
+        <div>
+          <InputBukuKas setTrigger={setTrigger} trigger={trigger} />
+        </div>
+        <SkeletonTableComponent
+          count={[
+            { cellWidth: "w-[10%]" },
+            { cellWidth: "w-[40%]" },
+            { cellWidth: "w-[10%]" },
+            { cellWidth: "w-[10%]" },
+            { cellWidth: "w-[20%]" },
+            { cellWidth: "w-[5%]" },
+            { cellWidth: "w-[5%]" },
+          ]}
+        />
+      </div>
+    );
   }
 
   return (

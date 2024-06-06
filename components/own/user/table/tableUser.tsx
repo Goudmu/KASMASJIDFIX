@@ -15,6 +15,7 @@ import { SessionProvider, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import AlertDelete from "../../alertDelete";
 import { toast } from "react-toastify";
+import SkeletonTableComponent from "../../skeleton/skeletonTable";
 
 const TableUser = ({ trigger, settrigger }: any) => {
   const [userData, setUserData] = useState<UserType[] | undefined>([]);
@@ -30,8 +31,20 @@ const TableUser = ({ trigger, settrigger }: any) => {
     getuserData();
   }, [trigger]);
 
-  if (userData == undefined) {
-    return <div>Loading...</div>;
+  if (userData?.length == 0) {
+    return (
+      <div className=" flex flex-col gap-5">
+        <SkeletonTableComponent
+          count={[
+            { cellWidth: "w-[25%]" },
+            { cellWidth: "w-[10%]" },
+            { cellWidth: "w-[55%]" },
+            { cellWidth: "w-[5%]" },
+            { cellWidth: "w-[5%]" },
+          ]}
+        />
+      </div>
+    );
   }
 
   const deleteHandler = async (e: React.MouseEvent<HTMLDivElement>) => {

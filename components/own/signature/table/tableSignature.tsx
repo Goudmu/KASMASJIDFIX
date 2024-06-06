@@ -50,8 +50,9 @@ export default function TableSignature({
           <TableRow>
             <TableHead className="w-[25%] text-center">Name</TableHead>
             <TableHead className="w-[10%] text-center">Role</TableHead>
-            <TableHead className="w-[45%] text-center">Tanda Tangan</TableHead>
-            <TableHead className="w-[20%] text-center">Edit / Delete</TableHead>
+            <TableHead className="w-[55%] text-center">Tanda Tangan</TableHead>
+            <TableHead className="w-[5%]">Edit</TableHead>
+            <TableHead className="w-[5%]">Edit</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -71,7 +72,7 @@ export default function TableSignature({
                       <img src={data.signature} alt="Signature" />
                     </div>
                   </TableCell>
-                  <TableCell className="text-right py-1 flex justify-center items-center">
+                  <TableCell>
                     <Button variant="ghost" size="icon">
                       <InputSignature
                         tipe={"edit"}
@@ -81,7 +82,10 @@ export default function TableSignature({
                       />
                       <span className="sr-only">Edit</span>
                     </Button>
+                  </TableCell>
+                  <TableCell>
                     <AlertDelete deleteFuntion={deleteHandler} id={data._id} />
+                    <span className="sr-only">Delete</span>
                   </TableCell>
                 </TableRow>
               );

@@ -1,6 +1,7 @@
 "use client";
 import InputSignature from "@/components/own/signature/form/inputSignature";
 import TableSignature from "@/components/own/signature/table/tableSignature";
+import SkeletonTableComponent from "@/components/own/skeleton/skeletonTable";
 import { useEffect, useState } from "react";
 
 const SignatureForm = () => {
@@ -25,7 +26,26 @@ const SignatureForm = () => {
   }, [trigger]);
 
   if (signatureSetting == null || signatureSetting == undefined) {
-    return <div>Loading...</div>;
+    return (
+      <div className=" flex flex-col gap-5">
+        <div>
+          <InputSignature
+            tipe={"input"}
+            setTrigger={setTrigger}
+            trigger={trigger}
+          />
+        </div>
+        <SkeletonTableComponent
+          count={[
+            { cellWidth: "w-[25%]" },
+            { cellWidth: "w-[10%]" },
+            { cellWidth: "w-[55%]" },
+            { cellWidth: "w-[5%]" },
+            { cellWidth: "w-[5%]" },
+          ]}
+        />
+      </div>
+    );
   }
 
   return (

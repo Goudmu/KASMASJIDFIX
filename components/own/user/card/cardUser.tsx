@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { roleUserUtils } from "@/lib/utils";
 import { toast } from "react-toastify";
+import LoadingComponent from "../../loading/loading";
 
 interface User {
   id?: string | null;
@@ -110,8 +111,12 @@ const CardUser = ({ trigger, settrigger }: any) => {
     }
   };
 
-  if (dataUser == undefined) {
-    return <div>Loading...</div>;
+  if (dataUser == undefined || dataUser == null) {
+    return (
+      <div>
+        <LoadingComponent />
+      </div>
+    );
   }
   return (
     <Card>

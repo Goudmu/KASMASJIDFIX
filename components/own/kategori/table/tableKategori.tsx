@@ -12,14 +12,6 @@ import {
 import { KategoriType } from "@/lib/mongodb/models";
 import React, { useState } from "react";
 import { capitalizeFirstLetter } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import InputKategori from "../form/inputKategori";
 import AlertDelete from "../../alertDelete";
@@ -58,24 +50,13 @@ export default function TableKategori({
 
   return (
     <div className="border rounded-lg overflow-hidden bg-white">
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-2">
-          <Input
-            className="max-w-[200px] sm:max-w-[300px]"
-            placeholder="Search Buku Kas..."
-            type="search"
-            id="input"
-            onChange={searchHandler}
-          />
-        </div>
-      </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>No</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Tipe</TableHead>
-            <TableHead>Nama Kegiatan</TableHead>
+            <TableHead className=" w-[5%]">No</TableHead>
+            <TableHead className=" w-[25%]">Name</TableHead>
+            <TableHead className=" w-[20%]">Tipe</TableHead>
+            <TableHead className=" w-[40%]">Nama Kegiatan</TableHead>
             <TableHead className=" w-[5%] text-center">Edit</TableHead>
             <TableHead className=" w-[5%] text-center">Delete</TableHead>
           </TableRow>

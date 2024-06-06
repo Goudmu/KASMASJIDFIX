@@ -2,6 +2,7 @@
 import { kegiatanIDStore } from "@/app/store/zustand";
 import InputKategori from "@/components/own/kategori/form/inputKategori";
 import TableKategori from "@/components/own/kategori/table/tableKategori";
+import SkeletonTableComponent from "@/components/own/skeleton/skeletonTable";
 import { BukuKasType, KategoriType } from "@/lib/mongodb/models";
 import { useEffect, useState } from "react";
 
@@ -33,7 +34,23 @@ const KategoriForm = () => {
   }, [trigger]);
 
   if (KategoriSetting == null || KategoriSetting == undefined) {
-    return <div>Loading...</div>;
+    return (
+      <div className=" flex flex-col gap-5">
+        <div>
+          <InputKategori setTrigger={setTrigger} trigger={trigger} />
+        </div>
+        <SkeletonTableComponent
+          count={[
+            { cellWidth: "w-[5%]" },
+            { cellWidth: "w-[25%]" },
+            { cellWidth: "w-[20%]" },
+            { cellWidth: "w-[40%]" },
+            { cellWidth: "w-[5%]" },
+            { cellWidth: "w-[5%]" },
+          ]}
+        />
+      </div>
+    );
   }
 
   return (

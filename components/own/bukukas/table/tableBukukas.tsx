@@ -66,17 +66,6 @@ export default function TableBukukas({
 
   return (
     <div className="overflow-hidden border rounded-lg">
-      <div className="flex items-center justify-between bg-white p-4">
-        <div className="flex items-center gap-2">
-          <Input
-            className="max-w-[200px] sm:max-w-[300px]"
-            placeholder="Search Buku Kas..."
-            type="search"
-            id="input"
-            onChange={searchHandler}
-          />
-        </div>
-      </div>
       <Table className=" bg-white ">
         <TableHeader>
           <TableRow>

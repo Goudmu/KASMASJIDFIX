@@ -10,6 +10,7 @@ import { kegiatanIDStore, userIDStore } from "../store/zustand";
 import InputTransaksi from "@/components/own/dashboard/form/inputTransaksi";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import CardOwn from "@/components/own/dashboard/card/card";
+import LoadingComponent from "@/components/own/loading/loading";
 
 const DashboardPage = () => {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
@@ -48,6 +49,14 @@ const DashboardPage = () => {
   useEffect(() => {
     getTransactions(kegiatanId);
   }, [triggerGetNewTransaksi]);
+
+  if (transaksi.length == 0 || category.length == 0 || kegiatan == null) {
+    return (
+      <div className=" flex items-center justify-center max-w-[90wh] min-h-[90vh]">
+        <LoadingComponent />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6 max-w-[90vw] m-auto">
