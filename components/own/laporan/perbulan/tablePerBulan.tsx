@@ -18,6 +18,7 @@ import {
 } from "@/lib/mongodb/models";
 import React, { useEffect, useState } from "react";
 import {
+  capitalizeFirstLetter,
   getMonthsArray,
   getYearsArray,
   thisMonth,
@@ -64,7 +65,9 @@ export default function TablePerBulan() {
     setTransaksi(transaksi);
     setKegiatan(kegiatan);
     settitle(
-      `Laporan Keuangan Kegiatan ${kegiatan.name} Periode ${selectedMonth.name} tahun ${selectedYear.id}`
+      `Laporan Keuangan Kegiatan ${capitalizeFirstLetter(
+        kegiatan.name
+      )} Periode ${selectedMonth.name} tahun ${selectedYear.id}`
     );
     saldoAwalHandler({
       month: selectedMonth.id,
@@ -151,7 +154,9 @@ export default function TablePerBulan() {
       transaksi: transaksi,
     });
     settitle(
-      `Laporan Keuangan Kegiatan ${kegiatan?.name} Periode ${newMonth.name} tahun ${selectedYear.id}`
+      `Laporan Keuangan Kegiatan ${capitalizeFirstLetter(
+        kegiatan?.name
+      )}Periode ${newMonth.name} tahun ${selectedYear.id}`
     );
   };
   const yearFilterHandler = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -167,7 +172,9 @@ export default function TablePerBulan() {
       transaksi: transaksi,
     });
     settitle(
-      `Laporan Keuangan Kegiatan ${kegiatan?.name} Periode ${selectedMonth.name} tahun ${newYear.name}`
+      `Laporan Keuangan Kegiatan ${capitalizeFirstLetter(
+        kegiatan?.name
+      )} Periode ${selectedMonth.name} tahun ${newYear.name}`
     );
   };
   const exportHandler = (e: any) => {

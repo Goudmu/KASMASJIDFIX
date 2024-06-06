@@ -25,7 +25,7 @@ export default function LaporanPage() {
                 prefetch={false}
               >
                 <CalendarIcon className="h-4 w-4" />
-                Report per Month
+                Laporan per Month
               </Link>
               <Link
                 href="/laporan/category"
@@ -33,7 +33,7 @@ export default function LaporanPage() {
                 prefetch={false}
               >
                 <TagIcon className="h-4 w-4" />
-                Report per Category
+                Laporan per Category
               </Link>
             </nav>
           </div>
