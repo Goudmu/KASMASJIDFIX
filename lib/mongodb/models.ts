@@ -55,6 +55,9 @@ export type BukuKasType = {
   userId: string;
   reportVisibilityCode: boolean;
   statusId: boolean;
+  saldoAwal: number;
+  totalPenerimaan: number;
+  totalPenngeluaran: number;
 };
 
 const kegiatanSchema2 = new Schema(

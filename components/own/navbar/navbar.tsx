@@ -31,7 +31,7 @@ export default function NavbarComponent() {
       </header>
     );
   }
-  if (pathname == "/") {
+  if (pathname == "/" || pathname.startsWith("/public/")) {
     return (
       <header className="bg-gray-900 text-white px-4 lg:px-6 py-4 flex items-center justify-between h-[5vh]">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
@@ -47,7 +47,7 @@ export default function NavbarComponent() {
             Home
           </Link>
           <Link
-            href="#"
+            href="/public/laporan"
             className="text-sm font-medium hover:underline underline-offset-4"
             prefetch={false}
           >
@@ -80,7 +80,7 @@ export default function NavbarComponent() {
                 Home
               </Link>
               <Link
-                href="#"
+                href="/public/laporan"
                 className="text-sm font-medium hover:underline underline-offset-4"
                 prefetch={false}
               >
