@@ -254,11 +254,11 @@ export default function TableDashboard({
         <Table className=" bg-white">
           <TableHeader>
             <TableRow>
-              <TableHead className=" w-[10%]">Date</TableHead>
-              <TableHead className=" w-[10%]">Type</TableHead>
-              <TableHead className=" w-[50%]">Description</TableHead>
-              <TableHead className=" w-[10%]">Category</TableHead>
-              <TableHead className=" w-[10%]">Amount</TableHead>
+              <TableHead className=" w-[10%]">Tanggal</TableHead>
+              <TableHead className=" w-[10%] text-center">Tipe</TableHead>
+              <TableHead className=" w-[50%]">Deskripsi Transaksi</TableHead>
+              <TableHead className=" w-[10%]">Kategori</TableHead>
+              <TableHead className=" w-[10%]">Jumlah</TableHead>
               <TableHead className=" w-[5%] text-center">Edit</TableHead>
               <TableHead className=" w-[5%] text-center">Delete</TableHead>
             </TableRow>
@@ -281,11 +281,23 @@ export default function TableDashboard({
                       <TableRow key={index}>
                         <TableCell className=" py-1">{formattedDate}</TableCell>
                         <TableCell className=" py-1">
-                          {capitalizeFirstLetter(data.tipe)}
+                          <div
+                            className={`text-center text-xs md:text-sm border rounded-md py-1 px-2 w-fit  text-black`}
+                          >
+                            {capitalizeFirstLetter(data.tipe)}
+                          </div>
                         </TableCell>
                         <TableCell className=" py-1">{data.desc}</TableCell>
                         <TableCell className=" py-1">
-                          {capitalizeFirstLetter(data.kategoriName)}
+                          <div
+                            className={`text-xs md:text-sm text-center rounded-md py-1 px-2 w-fit font-bold ${
+                              data.tipe == "penerimaan"
+                                ? "bg-green-500"
+                                : "bg-red-500"
+                            } text-white w-full`}
+                          >
+                            {capitalizeFirstLetter(data.kategoriName)}
+                          </div>
                         </TableCell>
                         <TableCell className=" py-1">
                           Rp{commafy(data.amount)}

@@ -55,7 +55,7 @@ export default function TableKategori({
           <TableRow>
             <TableHead className=" w-[5%]">No</TableHead>
             <TableHead className=" w-[25%]">Name</TableHead>
-            <TableHead className=" w-[20%]">Tipe</TableHead>
+            <TableHead className=" w-[20%] ">Tipe</TableHead>
             <TableHead className=" w-[40%]">Nama Kegiatan</TableHead>
             <TableHead className=" w-[5%] text-center">Edit</TableHead>
             <TableHead className=" w-[5%] text-center">Delete</TableHead>
@@ -73,7 +73,11 @@ export default function TableKategori({
                       {capitalizeFirstLetter(data.nama)}
                     </TableCell>
                     <TableCell className=" py-2">
-                      {capitalizeFirstLetter(data.tipe)}
+                      <div
+                        className={`text-center text-xs md:text-sm border rounded-md py-1 px-2 w-fit  text-black`}
+                      >
+                        {capitalizeFirstLetter(data.tipe)}
+                      </div>
                     </TableCell>
                     <TableCell className=" py-2">
                       {capitalizeFirstLetter(data.kegiatanName)}
