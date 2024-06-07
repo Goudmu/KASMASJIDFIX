@@ -35,7 +35,7 @@ const InputKategori = ({ tipe, dataKategori, trigger, setTrigger }: any) => {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Transaksi</AlertDialogTitle>
+            <AlertDialogTitle>Kategori</AlertDialogTitle>
             <AlertDialogDescription>
               Aksi ini akan {tipe == "edit" ? "mengedit" : "menambah"} Kategori
             </AlertDialogDescription>
