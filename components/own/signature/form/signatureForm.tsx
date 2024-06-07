@@ -4,17 +4,8 @@ import { Input } from "@/components/ui/input";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { AlertDialogAction, AlertDialogCancel } from "../../../ui/alert-dialog";
 
-import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { KategoriType } from "@/lib/mongodb/models";
 
 export default function ComponentSignature({
   setTrigger,
@@ -169,49 +160,6 @@ export default function ComponentSignature({
               Hapus Tanda Tangan
             </Button>
           </div>
-          {/* Role */}
-          {/* <div className="space-y-2">
-            <div className=" w-full">
-              <div>
-                <Label htmlFor="category" className="text-right">
-                  Role
-                </Label>
-              </div>
-              <div>
-                <Select onValueChange={categoryHandler}>
-                  <SelectTrigger>
-                    <SelectValue
-                      placeholder={
-                        dataTransaksi
-                          ? capitalizeFirstLetter(
-                              category.filter(
-                                (data: any) =>
-                                  data._id == dataTransaksi.kategoriId
-                              )[0].nama
-                            )
-                          : "Select Category..."
-                      }
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {category &&
-                      category.map((data: KategoriType) => {
-                        // CEK KATEGORI PENERIMAAN ATAU PENGELUARAN
-                        if (tipe == data.tipe) {
-                          return (
-                            <div key={data._id} id={data._id}>
-                              <SelectItem value={data._id}>
-                                {capitalizeFirstLetter(data.nama)}
-                              </SelectItem>
-                            </div>
-                          );
-                        }
-                      })}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div> */}
         </div>
         <div className=" flex justify-between">
           <AlertDialogCancel>Cancel</AlertDialogCancel>
