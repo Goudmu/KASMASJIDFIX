@@ -41,7 +41,7 @@ const InputBukuKas = ({
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Transaksi</AlertDialogTitle>
+            <AlertDialogTitle>Buku Kass</AlertDialogTitle>
             <AlertDialogDescription>
               Aksi ini akan {tipe == "edit" ? "mengedit" : "menambah"} Buku Kas
             </AlertDialogDescription>

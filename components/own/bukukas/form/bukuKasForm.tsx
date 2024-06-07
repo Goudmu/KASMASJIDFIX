@@ -94,7 +94,7 @@ export default function ComponentBukuKas({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="desc">Desc</Label>
+          <Label htmlFor="desc">Deskripsi</Label>
           <Input
             id="desc"
             placeholder="Masukkan Deskripsi..."

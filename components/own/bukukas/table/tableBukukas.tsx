@@ -69,8 +69,8 @@ export default function TableBukukas({
       <Table className=" bg-white ">
         <TableHeader>
           <TableRow>
-            <TableHead className=" w-[10%] text-center">Name</TableHead>
-            <TableHead className=" text-center">Description</TableHead>
+            <TableHead className=" w-[10%] text-center">Nama</TableHead>
+            <TableHead className=" text-center">Deskripsi</TableHead>
             <TableHead className=" w-[10%] text-center">Tipe</TableHead>
             <TableHead className=" w-[10%] text-center">Status</TableHead>
             <TableHead className=" w-[20%] text-center">
