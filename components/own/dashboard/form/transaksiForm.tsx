@@ -173,8 +173,19 @@ export default function ComponentTransaction({
                   <SelectContent>
                     {category &&
                       category.map((data: KategoriType) => {
+                        if (tipe == "edit") {
+                          if (dataTransaksi.tipe == data.tipe) {
+                            return (
+                              <div key={data._id} id={data._id}>
+                                <SelectItem value={data._id}>
+                                  {capitalizeFirstLetter(data.nama)}
+                                </SelectItem>
+                              </div>
+                            );
+                          }
+                        }
                         // CEK KATEGORI PENERIMAAN ATAU PENGELUARAN
-                        if (tipe == data.tipe) {
+                        else if (tipe == data.tipe) {
                           return (
                             <div key={data._id} id={data._id}>
                               <SelectItem value={data._id}>
