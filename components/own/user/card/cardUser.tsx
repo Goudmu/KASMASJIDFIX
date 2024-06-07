@@ -122,8 +122,8 @@ const CardUser = ({ trigger, settrigger }: any) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Account Settings</CardTitle>
-        <CardDescription>Manage your account details</CardDescription>
+        <CardTitle>Pengaturan Akun</CardTitle>
+        <CardDescription>Atur Detail Akunmu</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <div className="grid gap-2">
@@ -194,7 +194,7 @@ const CardUser = ({ trigger, settrigger }: any) => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={updateHandler}>Save Changes</Button>
+        <Button onClick={updateHandler}>Simpan Perubahan</Button>
       </CardFooter>
     </Card>
   );

@@ -31,13 +31,13 @@ const InputUser = ({ tipe, data, trigger, settrigger }: any) => {
           ) : (
             <Button variant="outline">
               <PlusIcon className="mr-2 h-4 w-4" />
-              Input User
+              Input Akun
             </Button>
           )}
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Transaksi</AlertDialogTitle>
+            <AlertDialogTitle>Akun</AlertDialogTitle>
             <AlertDialogDescription>
               Aksi ini akan {tipe == "edit" ? "mengedit" : "menambah"} Akun
             </AlertDialogDescription>
