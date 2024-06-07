@@ -27,6 +27,7 @@ import {
 import { kegiatanIDStore } from "@/app/store/zustand";
 import SkeletonTableComponent from "../../../skeleton/skeletonTable";
 import LaporanPerBulanTablePublic from "./table";
+import { CalendarIcon, ChevronDownIcon } from "@/lib/icon/icon";
 
 export default function TablePerBulanPublic({ kegiatanId }: any) {
   const [transaksi, setTransaksi] = useState<TransactionType[]>([]);
@@ -330,46 +331,5 @@ export default function TablePerBulanPublic({ kegiatanId }: any) {
         />
       </div>
     </div>
-  );
-}
-
-function CalendarIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
   );
 }
