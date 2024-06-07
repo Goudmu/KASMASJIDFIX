@@ -3,7 +3,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { AlertDialogAction, AlertDialogCancel } from "../../../ui/alert-dialog";
-import { capitalizeFirstLetter } from "@/lib/utils";
 import { toast } from "react-toastify";
 import { userIDStore } from "@/app/store/zustand";
 import { Switch } from "@/components/ui/switch";

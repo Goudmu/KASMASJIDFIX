@@ -9,7 +9,6 @@ import React, { useEffect, useState } from "react";
 import { kegiatanIDStore, userIDStore } from "../store/zustand";
 import InputTransaksi from "@/components/own/dashboard/form/inputTransaksi";
 import { capitalizeFirstLetter } from "@/lib/utils";
-import CardOwn from "@/components/own/dashboard/card/card";
 import LoadingComponent from "@/components/own/loading/loading";
 
 const DashboardPage = () => {

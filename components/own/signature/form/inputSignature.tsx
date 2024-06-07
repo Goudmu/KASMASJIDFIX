@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { capitalizeFirstLetter } from "@/lib/utils";
-import ComponentSignature from "./signatureForm2";
+import ComponentSignature from "./signatureForm";
 import { PencilIcon } from "@/lib/icon/icon";
 
 const InputSignature = ({ setTrigger, trigger, tipe, data }: any) => {
