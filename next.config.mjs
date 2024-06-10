@@ -13,6 +13,14 @@ const nextConfig = {
     }
     return config;
   },
+  async rewrites() {
+    return [
+      {
+        source: "/robots.txt",
+        destination: "/api/robots",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
