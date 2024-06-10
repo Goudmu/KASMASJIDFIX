@@ -32,11 +32,23 @@ export default function RootLayout({
         <title>Buku Kas Masjid Agung Gamping</title>
         <meta
           name="description"
-          content={"Aplikasi Buku Kas pada Masjid Agung Gamping"}
+          content="Aplikasi Buku Kas pada Masjid Agung Gamping"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-        {/* Add other default meta tags here */}
+        <meta name="robots" content="index, follow" />
+        <meta property="og:title" content="Buku Kas Masjid Agung Gamping" />
+        <meta
+          property="og:description"
+          content="Aplikasi Buku Kas pada Masjid Agung Gamping"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://kasmasjidfix.vercel.app/" />
+        <meta
+          name="google-site-verification"
+          content="T6zkOBnWNKnMML-OknWhEBrM6JVU7nMFUZRHuvZn6Jw"
+        />
+        <link rel="canonical" href="https://kasmasjidfix.vercel.app/" />
       </head>
       <body
         className={cn(
