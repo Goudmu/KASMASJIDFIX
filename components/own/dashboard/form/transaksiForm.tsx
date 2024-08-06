@@ -69,6 +69,8 @@ export default function ComponentTransaction({
   };
 
   const submitHandler = async (e: any) => {
+    let newFormData = formData;
+    newFormData.date = selectedDate;
     // EDIT TRANSAKSI
     if (tipe == "edit") {
       const res = await fetch("/api/transaksi", {
@@ -83,7 +85,7 @@ export default function ComponentTransaction({
       // ADD TRANSAKSI
       const res = await fetch("/api/transaksi", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(newFormData),
       });
       if (res.ok) {
         toast.success("Transaksi Berhasil ditambahkan");
@@ -140,7 +142,8 @@ export default function ComponentTransaction({
                     <Calendar
                       mode="single"
                       selected={selectedDate}
-                      onSelect={setselectedDate}
+                      // onSelect={setselectedDate}
+                      onDayClick={(e) => setselectedDate(e)}
                       initialFocus
                     />
                   </PopoverContent>
